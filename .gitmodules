@@ -1,0 +1,4 @@
+[submodule "kernel/linux-stable"]
+	path = kernel/linux-stable
+	url = file:///home/maclean/git/linux-stable
+	branch = branch-v2.6.35-ael1
