@@ -2,6 +2,9 @@
 
 # install a package to a debian repository
 
+# Allow group writes
+umask 0002
+
 repo=/net/www/docs/software/debian
 repo=/net/ftp/pub/temp/users/maclean/debian
 
@@ -31,16 +34,20 @@ for d in $debs; do
     pkg=${pkg%_*}
     echo "d=$d, pkg=$pkg"
     pkgs="$pkgs $pkg"
-done
 
+    # sign the package
+    dpkg-sig --sign builder -k "<eol-prog@eol.ucar.edu>" $d
+done
 
 # get list of binary packages from .changes file
 # pkgs=$(grep "^Binary:" $changes | sed -e s/Binary://)
 
 # archs=$(grep "^Architecture:" $changes | sed -e 's/Architecture: *//' | tr \  "|")
 
+flock $repo reprepro -b $repo deleteunreferenced
 
-flock $repo reprepro -V -b $repo -T deb remove jessie $pkgs
+flock $repo reprepro -V -b $repo -C main -T deb remove jessie $pkgs
 
-flock $repo reprepro -V -b $repo includedeb jessie $debs
+flock $repo reprepro -V -b $repo -C main includedeb jessie $debs
+rm -f $debs
 
