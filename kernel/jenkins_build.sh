@@ -29,6 +29,9 @@ save_md5() {
 for file in config-3.16-titan; do
     if ! check_md5 $file > /dev/null; then
         ./build_dpkg.sh $file && save_md5 $file
+        # todo:
+        #   sign .deb files
+        #   copy to debian repo
     else
         echo "No changes to $file since last build"
     fi

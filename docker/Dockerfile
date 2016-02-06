@@ -7,8 +7,8 @@ ARG group=armcross
 ARG gid=1000
 
 RUN apt-get update
-RUN apt-get install -y --no-install-recommends apt-utils vim curl sudo git ca-certificates build-essential fakeroot libncurses-dev bc
-RUN apt-get install -y apt-utils sudo
+RUN apt-get install -y --no-install-recommends apt-utils vim curl sudo git ca-certificates build-essential fakeroot libncurses-dev bc dh-make
+RUN apt-get install -y sudo
 
 # Get cross tools from emdebian
 RUN echo "deb http://emdebian.org/tools/debian/ jessie main" >> /etc/apt/sources.list.d/crosstools.list
