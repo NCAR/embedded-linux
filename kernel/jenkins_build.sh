@@ -32,6 +32,9 @@ save_md5() {
     md5sum $file > $sumfile
 }
 
+export GPG_AGENT_INFO
+[ -e $HOME/.gpg-agent-info ] && . $HOME/.gpg-agent-info
+
 # for file in config-3.16-titan config-3.16-viper; do
 for file in config-3.16-titan; do
     if ! check_md5 $file > /dev/null; then
