@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if ! [ -f /etc/debian_version ]; then
+    echo "Run this on debian systems"
+    exit 1
+fi
+
 # Build Debian kernel packages for armel systems.
 
 # The plan is to have titan1 and titan2 kernels on the DSMs.
@@ -61,6 +66,9 @@ while [ $# -gt 0 ]; do
     -i)
         shift
         repo=$1
+        ;;
+    -h)
+        usage $0
         ;;
     -n)
         distclean=false
