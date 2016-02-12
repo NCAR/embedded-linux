@@ -1,0 +1,7 @@
+pxaregs (1.14) stable; urgency=low
+
+  * Initial build from git clone of
+  https://github.com/openembedded/meta-openembedded.git, subdirectory
+  meta-openembedded/meta-oe/recipes-support/pxaregs.
+
+ -- Gordon Maclean <maclean@ucar.edu>  Fri, 12 Feb 2016 11:19:49 -0700

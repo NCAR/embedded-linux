@@ -1,0 +1,13 @@
+Source: pxaregs
+Section: devel
+Priority: optional
+Maintainer: Gordon Maclean <maclean@ucar.edu>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.6
+Homepage: https://github.com/openembedded/meta-openembedded/tree/master/meta-oe/recipes-support/pxaregs
+
+Package: pxaregs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: PProgram to get/set registers on ARM PXA cpu
+ Program to get/set registers on ARM PXA cpu
