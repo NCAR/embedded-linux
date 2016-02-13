@@ -1,0 +1,20 @@
+--- a/pxaregs.c
++++ b/pxaregs.c
+@@ -1794,7 +1794,7 @@
+    regaddr = map + (addr & MAP_MASK);
+ 
+    val = *(u32*) regaddr;
+-   munmap(0,MAP_SIZE);
++   munmap(map,MAP_SIZE);
+ 
+    return val;
+ }
+@@ -1829,7 +1829,7 @@
+    regaddr = map + (addr & MAP_MASK);
+ 
+    *(u32*) regaddr = val;
+-   munmap(0,MAP_SIZE);
++   munmap(map,MAP_SIZE);
+ }
+ 
+ static u32 lastaddr = 0;

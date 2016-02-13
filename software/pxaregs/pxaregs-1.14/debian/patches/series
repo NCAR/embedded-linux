@@ -1,0 +1,5 @@
+Makefile.patch
+i2c.patch
+munmap.patch
+serial.patch
+usb.patch

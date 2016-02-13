@@ -1,4 +1,4 @@
-pxaregs (1.14) stable; urgency=low
+pxaregs (1.14-1) stable; urgency=low
 
   * Initial build from git clone of
   https://github.com/openembedded/meta-openembedded.git, subdirectory
