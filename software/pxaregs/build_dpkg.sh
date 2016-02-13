@@ -54,7 +54,10 @@ fi
 
 rm -f ${pkg}_*_$arch.changes
 
+tar xzf ${pkg}_1.14.orig.tar.gz
+
 cd ${pkg}-1.14
+
 
 debuild $args "$karg"
 
