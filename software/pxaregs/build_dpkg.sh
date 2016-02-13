@@ -1,8 +1,6 @@
 #!/bin/sh
 
-# git clone to $tmpdir
-# copy debian directory to $tmpdir
-# build "native" package
+pkg=pxaregs
 
 key="<eol-prog@eol.ucar.edu>"
 
@@ -46,29 +44,23 @@ sdir=$(dirname $0)
 cd $sdir
 sdir=$PWD
 
-giturl=https://github.com/openembedded/meta-openembedded.git
+args="-a$arch"
+karg=
+if $sign; then
+    karg=-k"$key"
+else
+    args="$args -us -uc"
+fi
 
-tmpdir=$(mktemp -d /tmp/${script}_XXXXXX)
-trap "{ rm -rf $tmpdir; }" EXIT
+rm -f ${pkg}_*_$arch.changes
 
-cd $tmpdir
+cd ${pkg}-1.14
 
-git clone $giturl
-
-cd meta-openembedded/meta-oe/recipes-support/pxaregs/pxaregs-1.14 || exit 1
-
-# The original debian directory was created with:
-#   dh_make --native --single
-
-rsync -a $sdir/debian .
-rsync -a $sdir/Makefile .
-
-
-debuild -aarmel -k"$key"
+debuild $args "$karg"
 
 cd ..
 
-changes=pxaregs_*_armel.changes
+changes=${pkg}_*_armel.changes
 
 pkgs=$(grep "^Binary:" $changes | sed -e s/Binary://)
 archs=$(grep "^Architecture:" $changes | sed -e 's/Architecture: *//' | tr \  "|")
@@ -81,6 +73,5 @@ if [ -n "$repo" ]; then
         reprepro -b $repo deleteunreferenced;
         reprepro -V -b $repo -A '$archs' include jessie $changes"
 else
-    cp pxaregs_*.build pxaregs_*.changes pxaregs_*.deb pxaregs_*.dsc pxaregs_*.tar.tz $sdir
     echo "Results in $sdir"
 fi
