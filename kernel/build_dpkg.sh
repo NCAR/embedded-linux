@@ -91,7 +91,8 @@ localv=
 # version number of this repository
 debver=$(git describe --match '[vV][0-9]*' 2>/dev/null || echo v1.0-0)
 debver=${debver/#v/}    # remove leading v
-debver=${debver//-/+}   # replace dashes with .
+debver=${debver%-g*}    # remove trailing -gXXXXX
+# debver=${debver//-/+}   # replace dashes with .
 
 cd linux-stable-armel
 
@@ -120,7 +121,7 @@ if $sign; then
     done
 fi
 
-# remove _debver_armel.deb from pkg file names
+# remove _debver_armel.deb from names of packages passed to reprepro
 pkgnames=
 for pkg in $pkgs; do
     pkg=${pkg%_*}
