@@ -3,7 +3,7 @@
 # simple script to run menuconfig on a config file
 
 if [ $# -lt 1 ]; then
-    echo "Usage ${0##*/} config
+    echo "Usage ${0##*/} config"
     exit 1
 fi
 
