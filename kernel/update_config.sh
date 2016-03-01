@@ -15,7 +15,19 @@ cd linux-stable-armel
 
 make ARCH=arm menuconfig
 
-newconfig=${config}.new
-cp .config ../$newconfig
+cd -
 
-echo "config saved as $newconfig"
+oldconfig=${config}.old
+
+i=1
+while [ -f $oldconfig ]; do
+    oldconfig=${config}.old$i
+    i=$((i + 1))
+done
+
+echo "Saving $config as $oldconfig"
+mv $config $oldconfig
+
+cp linux-stable-armel/.config $config
+
+echo "New config copied to $config"
