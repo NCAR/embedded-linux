@@ -102,7 +102,12 @@ if $repart; then
     echo "END"
 
     echo "doing: sudo sfdisk -q $dev"
+    # Tends to show this error:
+    # Re-reading the partition table failed.: Device or resource busy
     sudo sfdisk -q $dev < $sffile || exit 1
+    echo "Partitioning success, calling partprobe"
+    partprobe $dev
+    echo "partprobe done"
 else
     echo "Partitions OK"
 fi

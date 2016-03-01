@@ -33,11 +33,14 @@ mount | fgrep $mntpt
 
 excfile=$(mktemp /tmp/${0##*/}_XXXXXX)
 tmptar=$(mktemp /tmp/${0##*/}_XXXXXX).tar.xz
-trap "{ rm $excfile $tmptar; }" EXIT
+trap "{ rm -f $excfile $tmptar; }" EXIT
 
+# Can't figure out how to exclude var/log, but include var/log/dmesg
 # /etc/init.d/bootlogs complains if this file is missing.
 # It's the only file in var/log that we backup
-cat /dev/null > var/log/dmesg
+# sudo sh -c "cat /dev/null > $mntpt/var/log/dmesg"
+# --exclude-tag=var/log/dmesg didn't work
+# try --exclude-tag=log/dmesg didn't work
 
 # don't backup these directories or files
 cat > $excfile << EOD
@@ -48,14 +51,17 @@ var/lib/dhcpd5
 var/lib/logrotate 
 var/lib/ntp 
 var/lib/urandom 
-var/log
 var/spool/cron
 var/tmp
+.bash_history
 EOD
 
-sudo tar Jcf $tmptar -C $mntpt -X $excfile var usr opt var/log/dmesg
+sudo tar Jcf $tmptar -C $mntpt -X $excfile --exclude-tag=log/dmesg var usr opt
 
-# $tmptar is owned by root
+# $tmptar is owned and rw only by root
+sudo chmod ugo+r $tmptar
+
 cp $tmptar $tarfile
 
-chmod +r $tarfile
+sudo rm $tmptar
+

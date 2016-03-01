@@ -1,5 +1,14 @@
 #!/bin/sh
 
+# partition and make ext4 file systems on a device, generally a
+# SD or CF flash card.
+
+# Note, there are posts on the net about optimizing the partitioning,
+# the ext4 file system and the mount options for a given type of SD card.
+# https://blogofterje.wordpress.com/2012/01/14/optimizing-fs-on-sd-card/
+# The "flashbench" program is apparently a useful tool.
+# None of that is done here.
+
 # script directory
 sdir=${0%/*}
 
@@ -36,6 +45,13 @@ fi
 
 $sdir/partition_media.sh $dev $sizemb || exit 1
 
+sudo partprobe $dev
+
+sleep 2
+
+echo "Doing sfdisk -l --verify $def"
+sudo sfdisk -l --verify $dev || exit 1
+
 declare -A pdevs
 if $mmcdev; then
     pdevs[root]="${dev}p1"
@@ -52,6 +68,7 @@ for label in ${!pdevs[*]}; do
         mount | fgrep $part
         exit 1
     fi
+
 
     echo "doing mkfs.ext4 -L $label $pdev"
     sudo mkfs.ext4 -L $label $pdev
