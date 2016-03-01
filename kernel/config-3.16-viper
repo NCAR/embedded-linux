@@ -1047,7 +1047,7 @@ CONFIG_SCSI_LOGGING=y
 # CONFIG_SCSI_DH is not set
 # CONFIG_SCSI_OSD_INITIATOR is not set
 CONFIG_ATA=m
-# CONFIG_ATA_NONSTANDARD is not set
+CONFIG_ATA_NONSTANDARD=y
 CONFIG_ATA_VERBOSE_ERROR=y
 # CONFIG_SATA_PMP is not set
 
@@ -1060,16 +1060,7 @@ CONFIG_ATA_SFF=y
 #
 # SFF controllers with custom DMA interface
 #
-CONFIG_ATA_BMDMA=y
-
-#
-# SATA SFF controllers with BMDMA
-#
-
-#
-# PATA SFF controllers with BMDMA
-#
-# CONFIG_PATA_PXA is not set
+# CONFIG_ATA_BMDMA is not set
 
 #
 # PIO-only SFF controllers
@@ -1082,7 +1073,7 @@ CONFIG_PATA_PCMCIA=m
 #
 # Generic fallback / legacy drivers
 #
-# CONFIG_PATA_LEGACY is not set
+CONFIG_PATA_LEGACY=m
 # CONFIG_MD is not set
 # CONFIG_TARGET_CORE is not set
 CONFIG_NETDEVICES=y
