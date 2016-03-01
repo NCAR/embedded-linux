@@ -96,6 +96,14 @@ debver=${debver%-g*}    # remove trailing -gXXXXX
 
 cd linux-stable-armel
 
+kver=$(make kernelversion)  # 3.16.0
+krel=$(make ARCH=arm kernelrelease)  # 3.16.0-titanN+
+
+rm -f ../linux-firmware-image-${kver}-*_${debarch}.deb \
+    ../linux-headers-${kver}-*_${debarch}.deb \
+    ../linux-image-${kver}-*_${debarch}.deb \
+    ../linux-libc-dev_*_${debarch}.deb
+
 $distclean && make ARCH=arm distclean
 
 cp ../$config .config
@@ -105,9 +113,6 @@ make ARCH=arm oldconfig
 export KBUILD_PKG_ROOTCMD='fakeroot -u'
 
 make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- LOCALVERSION=$localv KDEB_PKGVERSION=$debver V=$verbosity deb-pkg
-
-kver=$(make kernelversion)  # 3.16.0
-krel=$(make ARCH=arm kernelrelease)  # 3.16.0-titanN+
 
 cd ..
 
@@ -137,7 +142,7 @@ if [ -n "$repo" ]; then
         reprepro -V -b $repo deleteunreferenced;
         reprepro -V -b $repo includedeb jessie $pkgs"
 
-    rm -f $pkgs linux-libc-dev*${debarch}.deb
+    rm -f $pkgs linux-libc-dev_*_${debarch}.deb
 
 else
     echo "packages: $pkgs"
