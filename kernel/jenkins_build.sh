@@ -36,7 +36,7 @@ save_md5() {
 export GPG_AGENT_INFO
 [ -e $HOME/.gpg-agent-info ] && . $HOME/.gpg-agent-info
 
-for file in config-3.16-titan config-3.16.viper; do
+for file in config-3.16-titan config-3.16-viper; do
     if ! check_md5 $file > /dev/null; then
         ./build_dpkg.sh -s -i $repo $file && save_md5 $file
     else
