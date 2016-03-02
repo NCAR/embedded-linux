@@ -33,12 +33,8 @@ save_md5() {
     md5sum $file > $sumfile
 }
 
-export GPG_AGENT_INFO
-if [ -e $HOME/.gpg-agent-info ]; then
-    . $HOME/.gpg-agent-info
-else
-    echo "Warning: $HOME/.gpg-agent-info not found"
-fi
+# Complain early if gpg-agent file can't be found
+[ -e $HOME/.gpg-agent-info ] || echo "Warning: $HOME/.gpg-agent-info not found"
 
 for file in config-3.16-titan config-3.16-viper; do
     if ! check_md5 $file > /dev/null; then

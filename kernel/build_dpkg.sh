@@ -121,8 +121,14 @@ pkgs=$(echo linux-firmware-image-${kver}-*_${debarch}.deb \
     linux-image-${kver}-*_${debarch}.deb)
 
 if $sign; then
+    export GPG_AGENT_INFO
+    if [ -e $HOME/.gpg-agent-info ]; then
+        . $HOME/.gpg-agent-info
+    else
+        echo "Warning: $HOME/.gpg-agent-info not found"
+    fi
     for pkg in $pkgs; do
-        dpkg-sig --sign builder -k "$key" $pkg
+        dpkg-sig -k "$key" --gpg-options "--batch --no-tty" --sign builder $pkg
     done
 fi
 
