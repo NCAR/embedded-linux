@@ -11,14 +11,15 @@ repo=$1
 # Build kernel for a config file if the md5sum of
 # the config file has changed.
 
-# If you just change a simple thing like adding a kernel module
-# to the config and are confident that it won't break things on the
-# target system then you can make that change without changing
-# CONFIG_LOCALVERSION in the config file.
+# CONFIG_LOCALVERSION is typically set to viper2 or titan2 in
+# the configs. The idea is that the viper1 and titan1 kernels
+# are trusted backup kernels on the armel systems which can be
+# used to recover a system if a new kernel won't boot.
+# So make all changes with CONFIG_LOCAL_VERSION set to viper2, titan2.
 
-# If you have made significant changes and you don't want the
-# new kernel to overwrite the old on the target system, then
-# also change CONFIG_LOCALVERSION in the config.
+# The viper1 and titan1 kernels can be updated from time to time
+# with significant fixes if you know the version 2 kernel boots
+# dependably.
 
 check_md5() {
     local file=$1
@@ -35,8 +36,7 @@ save_md5() {
 export GPG_AGENT_INFO
 [ -e $HOME/.gpg-agent-info ] && . $HOME/.gpg-agent-info
 
-# for file in config-3.16-titan config-3.16-viper; do
-for file in config-3.16-titan; do
+for file in config-3.16-titan config-3.16.viper; do
     if ! check_md5 $file > /dev/null; then
         ./build_dpkg.sh -s -i $repo $file && save_md5 $file
     else
