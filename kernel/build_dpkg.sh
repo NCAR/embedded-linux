@@ -7,17 +7,16 @@ fi
 
 # Build Debian kernel packages for armel systems.
 
-# The plan is to have titan1 and titan2 kernels on the DSMs.
+# The plan is to have version 1 and 2 kernels on the DSMs.
 #   /boot/vmlinuz-3.16.0-titan1
 #   /boot/vmlinuz-3.16.0-titan2
 
-# RedBoot on the DSMs will be configured to run the titan2 kernels,
-# and new kernels that are build should be titan2 kernels.
+# RedBoot on the DSMs will be configured to run the version 2 kernels,
+# and new kernels that are build should be version 2 kernels, and the
+# version 1's are a fallback in case a version 2 won't boot.
 
-# The titan1 kernel should not be updated. It is a fallback in case
-# a new titan2 kernel won't boot.
-
-# So generally CONFIG_LOCALVERSION=titan2.
+# So usually:
+# CONFIG_LOCALVERSION=viper2 or CONFIG_LOCALVERSION=titan2.
 
 # Info on the interplay of CONFIG_LOCALVERSION,
 #   CONFIG_LOCALVERSION_AUTO and the LOCALVERSION make argument
@@ -96,6 +95,12 @@ debver=${debver%-g*}    # remove trailing -gXXXXX
 
 cd linux-stable-armel
 
+# version number of linux-stable-armel
+kdebver=$(git describe --match '[vV][0-9]*' 2>/dev/null)
+kdebver=${kdebver/#v/}    # remove leading v
+kdebver=${kdebver%-g*}    # remove trailing -gXXXXX
+kdebcom=${kdebver##*-}    # get number of commits
+
 kver=$(make kernelversion)  # 3.16.0
 krel=$(make ARCH=arm kernelrelease)  # 3.16.0-titanN+
 
@@ -112,8 +117,8 @@ make ARCH=arm oldconfig
 
 export KBUILD_PKG_ROOTCMD='fakeroot -u'
 
-make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- LOCALVERSION=$localv KDEB_PKGVERSION=$debver V=$verbosity deb-pkg
-
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- \
+    LOCALVERSION=$localv KDEB_PKGVERSION=$debver.$kdebcom V=$verbosity deb-pkg
 cd ..
 
 pkgs=$(echo linux-firmware-image-${kver}-*_${debarch}.deb \

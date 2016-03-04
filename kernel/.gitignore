@@ -1,2 +1,3 @@
-.config-3.16-titan_md5sum
+.*_md5sum
+.kernel_version
 *.deb
