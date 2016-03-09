@@ -1,13 +1,13 @@
 #!/bin/sh
 
-# mount a JFFS2 file system, rsync its contents to another directory.
+# mount a JFFS2 file system image, rsync its contents to another directory.
 # The directory should not exist.  Root must have permission to create
 # and write to it, therefore it probably can't be on an NFS filesystem.
 
 sdir=${0%/*}
 
 if [ $# -lt 2 ]; then
-    echo "Usage ${0##*/} input_image dir"
+    echo "Usage ${0##*/} input_image outputdir"
     exit 1
 fi
 

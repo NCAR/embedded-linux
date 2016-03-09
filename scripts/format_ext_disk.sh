@@ -45,7 +45,7 @@ fi
 
 $sdir/partition_media.sh $dev $sizemb || exit 1
 
-sudo partprobe $dev
+sudo partprobe -s $dev
 
 sleep 2
 

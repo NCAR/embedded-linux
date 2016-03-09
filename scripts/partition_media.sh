@@ -50,6 +50,8 @@ if ! $ok; then
     exit 1
 fi
 
+sudo partprobe $dev
+
 for label in ${!pdevs[*]}; do
     pdev=${pdevs[$label]}
 
@@ -93,6 +95,8 @@ fi
 
 if $repart; then
 
+    sudo partprobe -s $dev
+
     echo "Re-partitioning"
 
     echo "-,${fsizemb},L" > $sffile
@@ -106,7 +110,7 @@ if $repart; then
     # Re-reading the partition table failed.: Device or resource busy
     sudo sfdisk -q $dev < $sffile || exit 1
     echo "Partitioning success, calling partprobe"
-    partprobe $dev
+    sudo partprobe -s $dev
     echo "partprobe done"
 else
     echo "Partitions OK"

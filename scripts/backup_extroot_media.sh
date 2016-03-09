@@ -35,15 +35,9 @@ excfile=$(mktemp /tmp/${0##*/}_XXXXXX)
 tmptar=$(mktemp /tmp/${0##*/}_XXXXXX).tar.xz
 trap "{ rm -f $excfile $tmptar; }" EXIT
 
-# Can't figure out how to exclude var/log, but include var/log/dmesg
-# /etc/init.d/bootlogs complains if this file is missing.
-# It's the only file in var/log that we backup
-# sudo sh -c "cat /dev/null > $mntpt/var/log/dmesg"
-# --exclude-tag=var/log/dmesg didn't work
-# try --exclude-tag=log/dmesg didn't work
-
 # don't backup these directories or files
 cat > $excfile << EOD
+lost+found
 var/backups
 var/lib/chrony
 var/lib/dbus 
@@ -53,10 +47,14 @@ var/lib/ntp
 var/lib/urandom 
 var/spool/cron
 var/tmp
+var/log/*.gz
+var/log/*.[0-9]
+var/log/*.[0-9][0-9]
+var/log/chrony
 .bash_history
 EOD
 
-sudo tar Jcf $tmptar -C $mntpt -X $excfile --exclude-tag=log/dmesg var usr opt
+sudo tar Jcf $tmptar -C $mntpt -X $excfile var usr opt
 
 # $tmptar is owned and rw only by root
 sudo chmod ugo+r $tmptar
