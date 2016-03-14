@@ -5,10 +5,10 @@ Release: %{releasenum}
 License: GPL
 Group: System Environment/Daemons
 Url: http://github.com/ncareol/embedded-armel
-Packager: Gordon Maclean <maclean@ucar.edu>
+Packager: %{packager}
 Vendor: UCAR
 BuildArch: noarch
-Requires: xinetd tftp-server
+Requires: xinetd tftp-server ael-local-dpkgs >= 1.0-29
 Source: %{name}-%{version}.tar.gz
 
 %define _binaries_in_noarch_packages_terminate_build 0
@@ -23,7 +23,7 @@ packages for armel, and kernels built from customized linux kernel source.
 Note from the description of the tftp-server package:
     "TFTP provides very little security, and should not be
     enabled unless it is expressly needed."
-So, only install this package on lab systems that are used to
+So, only install this package on lab servers that are used to
 install Linux on the armel systems.
 
 %prep

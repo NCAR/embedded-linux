@@ -64,6 +64,9 @@ release=${gitdesc#*-}       # 14-gabcdef123
 release=${release%-*}       # 14
 [ $gitdesc == "$release" ] && release=0 # no dash
 
+# get the author of the last commit. Will be set as the Packager in the RPM.
+author=$(git log -n 1 --format="%an <%aE>" .)
+
 # run git describe on each hash to create a version
 cat <<-\EOD > $awkcom
     /^[0-9a-f]{7}/ {
@@ -93,6 +96,7 @@ tar czf $topdir/SOURCES/${pkg}-${version}.tar.gz \
 
 rpmbuild -bb \
     --define "gitversion $version" --define "releasenum $release" \
+    --define "packager $author" \
     --define "_topdir $topdir" \
     --define "debug_package %{nil}" \
     $tmpspec 2>&1 | tee -a $log  || exit $?
