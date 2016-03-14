@@ -2,16 +2,12 @@
 
 script=`basename $0`
 
-dopkg=all
 install=false
 
 while [ $# -gt 0 ]; do
     case $1 in
         -i)
             install="true"
-            ;;
-        *)
-            dopkg=$1
             ;;
     esac
     shift
@@ -109,7 +105,6 @@ echo "rpms=$rpms"
 if $install && [ -d $rroot ]; then
 echo "Moving rpms to $rroot"
 copy_rpms_to_eol_repo $rpms
-echo "$rroot not found. Leaving RPMS in $topdir"
 else
 echo "-i or -r options not specified. RPMS will not be installed"
 fi
