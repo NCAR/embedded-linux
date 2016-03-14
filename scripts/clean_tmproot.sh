@@ -16,15 +16,20 @@ set -e
 cd $tmpdir
 
 sudo rm -rf etc/udev/rules.d/70-persistent-net.rules \
-    root/.ssh/known_hosts root/.ssh/authorized_keys* \
-    etc/apt/sources.list.d/eol.list \
-    .viminfo .bash_history \
-    root/.viminfo root/.bash_history \
-    root/minicom.log \
     usr/* var/* opt/* \
-    etc/ssh/ssh_host*key*
+    root/* root/.ssh/known_hosts root/.ssh/authorized_keys* \
+    root/.viminfo root/.bash_history \
+    .viminfo .bash_history \
+    etc/apt/sources.list.d/eol.list \
+    etc/ssh/*_key*
 
-cat << EOL > etc/apt/sources.list
+tmpfile=$(mktemp /tmp/${0##*/}_XXXXXX)
+trap "{ rm -f $tmpfile; }" EXIT
+
+cat /dev/null > $tmpfile
+sudo cp $tmpfile etc/machine-id
+
+cat << EOL > $tmpfile
 deb http://ftp.us.debian.org/debian/ jessie main
 
 deb http://security.debian.org/ jessie/updates main
@@ -32,6 +37,8 @@ deb http://security.debian.org/ jessie/updates main
 # jessie-updates, previously known as 'volatile'
 # deb http://ftp.us.debian.org/debian/ jessie-updates main
 EOL
+
+sudo cp $tmpfile etc/apt/sources.list
 
 # remove daq user, eol group
 

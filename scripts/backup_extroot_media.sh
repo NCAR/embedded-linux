@@ -33,7 +33,9 @@ mount | fgrep $mntpt
 
 excfile=$(mktemp /tmp/${0##*/}_XXXXXX)
 tmptar=$(mktemp /tmp/${0##*/}_XXXXXX).tar.xz
-trap "{ rm -f $excfile $tmptar; }" EXIT
+tmpdir=$(mktemp -d /tmp/${0##*/}_XXXXXX)
+tmpfile=$(mktemp /tmp/${0##*/}_XXXXXX)
+trap "{ rm -f $excfile $tmptar $tmpfile; }" EXIT
 
 # don't backup these directories or files
 cat > $excfile << EOD
@@ -54,7 +56,23 @@ var/log/chrony
 .bash_history
 EOD
 
-sudo tar Jcf $tmptar -C $mntpt -X $excfile var usr opt
+# Since we want to fiddle with files, rsync to a tmpdir
+# change things, then create the tar
+
+pushd $mntpt > /dev/null
+sudo rsync -a --exclude=from=$excfile var usr opt $tmpdir
+
+pushd $tmpdir > /dev/null
+
+# empty file
+cat /dev/null > $tmpfile
+
+sudo cp $tmpfile var/log/lastlog
+
+sudo tar cJf $tmptar opt usr var
+
+popd > /dev/null
+popd > /dev/null
 
 # $tmptar is owned and rw only by root
 sudo chmod ugo+r $tmptar
