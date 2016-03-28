@@ -71,6 +71,32 @@ exit 0
 %triggerin -- tftp-server
 
 cf=/etc/xinetd.d/tftp
+
+if ! [ -f $cf ]; then
+
+cat << EOD > $cf
+# default: off
+# description: The tftp server serves files using the trivial file transfer \
+#       protocol.  The tftp protocol is often used to boot diskless \
+#       workstations, download configuration files to network-aware printers, \
+#       and to start the installation process for some operating systems.
+service tftp
+{
+        socket_type             = dgram
+        protocol                = udp
+        wait                    = yes
+        user                    = root
+        server                  = /usr/sbin/in.tftpd
+        server_args             = -s /var/lib/tftpboot
+        disable    = no
+        only_from = 192.168.0.0/16
+        per_source              = 11
+        cps                     = 100 2
+        flags                   = IPv4
+}
+EOD
+fi
+
 if [ -f $cf ]; then
     if which systemctl > /dev/null 2>&1; then
         systemctl -q is-enabled xinetd.service || systemctl enable xinetd.service
