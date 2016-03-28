@@ -88,7 +88,8 @@ git log --max-count=100 --date-order --format="%H%n* %cd %aN%n- %s%n" --date=loc
 # use transform to add package-version path in front of file names
 tar czf $topdir/SOURCES/${pkg}-${version}.tar.gz \
     --transform="s,^\(.\),$pkg-$version/\1," \
-        redboot-* titan_deb8_root*.img viper_deb8_root*.img || exit $?
+        redboot-* titan_deb8_root*.img titan_fis_rb_*.img \
+        viper_deb8_root*.img || exit $?
 
 rpmbuild -bb \
     --define "gitversion $version" --define "releasenum $release" \

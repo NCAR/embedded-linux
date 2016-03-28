@@ -35,7 +35,7 @@ install Linux on the armel systems.
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/var/lib/tftpboot
-mv redboot-* titan_deb8_root*.img viper_deb8_root*.img \
+mv redboot-* titan_deb8_root*.img titan_fis_rb_*.img viper_deb8_root*.img \
        $RPM_BUILD_ROOT/var/lib/tftpboot
 
 %clean
@@ -72,6 +72,7 @@ exit 0
 
 cf=/etc/xinetd.d/tftp
 
+restartxinetd=false
 if ! [ -f $cf ]; then
 
 cat << EOD > $cf
@@ -95,6 +96,7 @@ service tftp
         flags                   = IPv4
 }
 EOD
+    restartxinetd=true
 fi
 
 if [ -f $cf ]; then
@@ -107,7 +109,6 @@ if [ -f $cf ]; then
     # enable tftp in xinetd
     disabled=`awk '/disable/{print $3}' $cf`
 
-    restartxinetd=false
     if [ "$disabled" != no ]; then
         sed -ri 's/disable[[:space:]]+=[[:space:]]*.*/disable    = no/' /etc/xinetd.d/tftp
         restartxinetd=true
@@ -165,6 +166,7 @@ exit 0
 %files
 /var/lib/tftpboot/redboot-*
 /var/lib/tftpboot/titan_deb8_root_*.img
+/var/lib/tftpboot/titan_fis_rb_*.img
 /var/lib/tftpboot/viper_deb8_root_*.img
 
 %changelog
