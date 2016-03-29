@@ -65,10 +65,10 @@ for label in ${!pdevs[*]}; do
     pdev=${pdevs[$label]}
     if mount | fgrep -q $pdev; then
         echo "Error: $pdev is mounted!"
-        mount | fgrep $part
-        exit 1
+        echo "Doing: umount $pdev"
+        umount $pdev || exit 1
+        mount | fgrep $pdev && exit 1
     fi
-
 
     echo "doing mkfs.ext4 -L $label $pdev"
     sudo mkfs.ext4 -L $label $pdev

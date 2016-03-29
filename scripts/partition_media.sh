@@ -50,17 +50,24 @@ if ! $ok; then
     exit 1
 fi
 
-sudo partprobe $dev
-
 for label in ${!pdevs[*]}; do
     pdev=${pdevs[$label]}
 
     if mount | fgrep -q $pdev; then
         echo "Error: $pdev is mounted!"
-        mount | fgrep $pdev
-        exit 1
+        echo "Doing: umount $pdev"
+        umount $pdev || exit 1
+        mount | fgrep $pdev && exit 1
     fi
 done
+
+if mount | fgrep -q $dev; then
+    echo "$dev is still mounted:"
+    mount | fgrep $dev
+    exit 1
+fi
+
+sudo partprobe $dev
 
 tmpfile=$(mktemp /tmp/${script}_XXXXXX)
 sffile=$(mktemp /tmp/${script}_XXXXXX)
