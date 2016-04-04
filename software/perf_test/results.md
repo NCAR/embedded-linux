@@ -1,4 +1,16 @@
-Eurotech Titan, AEL Embedded Linux v4i5
+## Simple Benchmarks
+Switching to EABI on the ARMv5 systems improves the floating point performance. Here are the results of the simple float_test benchmark on various systems.
+## Summary
+| System | OS | float_test time | Mflops |
+| --- | --- | --- | --- | --- |
+| Viper ARMv5, PXA255| AEL | | |
+| Titan ARMv5, PXA270 | AEL v4.15 |  1m40s | 0.20 |
+| Viper ARMv5, PXA255 | Debian 8, EABI | 22.9s | 0.87 |
+| Titan ARMv5, PXA270 | Debian 8, EABI | 19.7s | 1.01 |
+| Intel 2.9 GHz | Fedora 23 | 0.07s | 278 |
+
+The Mflops values were computed assuming there were two floating point operations (divide and sum) in each loop in float_test.
+## Eurotech Titan, AEL Embedded Linux v4i5
     Linux 2.6.35.9-ael1-2-titan #1 PREEMPT Wed Aug 12 13:49:07 MDT 2015 armv5tel unknown
     non-EABI
     arm-linux-g++ (GCC) 3.4.4
@@ -26,7 +38,7 @@ Eurotech Titan, AEL Embedded Linux v4i5
 
     2*10^7 Mflop/100.7 sec = 0.20 Mflops
 
-Eurotech Titan, Debian 8.3 Jessie, EABI
+## Eurotech Titan, Debian 8.3 Jessie, EABI
     Linux titan 3.16.0-titan2 #1 PREEMPT Sun Mar 6 12:30:28 MST 2016 armv5tel GNU/Linux
     arm-linux-gnueabi-g++ ( 4.9.2-10) 4.9.2
 
@@ -55,7 +67,7 @@ Eurotech Titan, Debian 8.3 Jessie, EABI
 
     1.01 Mflops
 
-Eurotech Viper, Debian 8.3 Jessie, EABI
+## Eurotech Viper, Debian 8.3 Jessie, EABI
     Linux viper 3.16.0-viper2 #1 PREEMPT Fri Mar 4 11:46:15 MST 2016 armv5tel GNU/Linux
     arm-linux-gnueabi-g++ ( 4.9.2-10) 4.9.2
 
@@ -84,7 +96,7 @@ Eurotech Viper, Debian 8.3 Jessie, EABI
 
     0.87 Mflops
 
-Dell Precision Desktop, Fedora 23
+## Dell Precision Desktop, Fedora 23
     Linux porter2 4.4.3-300.fc23.x86_64 #1 SMP Fri Feb 26 18:45:40 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
     g++ (GCC) 5.3.1 20151207 (Red Hat 5.3.1-2)
 
