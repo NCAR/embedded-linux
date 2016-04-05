@@ -1,15 +1,22 @@
 ## Simple Benchmarks
-Switching to EABI on the ARMv5 systems improves the floating point performance. Here are the results of the simple float_test benchmark on various systems.
+Switching to EABI on the ARMv5 systems improves the floating point performance. Here are the results of the simple float_test and loop_test benchmark on various systems.
 ## Summary
-| System | OS | float_test time | Mflops |
-| --- | --- | --- | --- | --- |
-| Viper ARMv5, PXA255| AEL | | |
-| Titan ARMv5, PXA270 | AEL v4.15 |  1m40s | 0.20 |
-| Viper ARMv5, PXA255 | Debian 8, EABI | 22.9s | 0.87 |
-| Titan ARMv5, PXA270 | Debian 8, EABI | 19.7s | 1.01 |
-| Intel 2.9 GHz | Fedora 23 | 0.07s | 278 |
+| System | OS | float_test time | Mflops | loop_test time | Mlps |
+| --- | --- | --- | --- | --- | --- | --- |
+| Viper ARMv5, PXA255| AEL | | | | |
+| Titan ARMv5, PXA270 | AEL v4.15 |  1m40s | 0.20 | | |
+| Viper ARMv5, PXA255 | Debian 8, EABI | 22.9s | 0.87 | | |
+| Titan ARMv5, PXA270 | Debian 8, EABI | 19.7s | 1.01 | 4.147s |  24 |
+| Intel 3.0 GHz | Fedora 23 | 0.07s | 278 |  0.273s | 370 |
 
 The Mflops values were computed assuming there were two floating point operations (divide and sum) in each loop in float_test.
+
+Mlps is the millions of loops per sec executed in loop_test.cc.
+
+Switching to EABI resulted in a 5X increase in floating point performance on the ARMv5 systems. 
+
+The floating point performance of the ARMv5s is still much slower proportionately than their basic ops/second rate, when compared to an Intel CPU, as could be expected because of the lack of hardware support for floating point.
+
 ## Eurotech Titan, AEL Embedded Linux v4i5
     Linux 2.6.35.9-ael1-2-titan #1 PREEMPT Wed Aug 12 13:49:07 MDT 2015 armv5tel unknown
     non-EABI
@@ -58,14 +65,19 @@ The Mflops values were computed assuming there were two floating point operation
 
     time ./float_test_armel 10000000
     n=10000000, sum=16.6953
-
     real    0m19.777s
     user    0m19.200s
     sys     0m0.030s
 
-    5 times faster than the non-EABI Titan
+    1.01 Mflops, 5 times faster than the non-EABI Titan
+    
+    time ./loop_test_armel 100000000
+    n=100000000, sum=887459712
+    real    0m4.147s
+    user    0m4.110s
+    sys     0m0.030s
 
-    1.01 Mflops
+    100/4.147 = 24 Mlps
 
 ## Eurotech Viper, Debian 8.3 Jessie, EABI
     Linux viper 3.16.0-viper2 #1 PREEMPT Fri Mar 4 11:46:15 MST 2016 armv5tel GNU/Linux
@@ -87,14 +99,11 @@ The Mflops values were computed assuming there were two floating point operation
 
     time ./float_test_armel 10000000
     n=10000000, sum=16.6953
-
     real    0m22.888s
     user    0m20.110s
     sys     0m0.070s
 
-    4.4 times faster than non-EABI Titan
-
-    0.87 Mflops
+    0.87 Mflops, 4.4 times faster than non-EABI Titan
 
 ## Dell Precision Desktop, Fedora 23
     Linux porter2 4.4.3-300.fc23.x86_64 #1 SMP Fri Feb 26 18:45:40 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
@@ -112,13 +121,17 @@ The Mflops values were computed assuming there were two floating point operation
 
     time $s/float_test_x86_64 10000000
     n=10000000, sum=16.6953
-
     real    0m0.072s
     user    0m0.069s
     sys 0m0.003s
-
-    1400 times faster than non-EABI Titan
+    
+    278 Mflops, 1400 times faster than non-EABI Titan
     275 times faster than an EABI Titan
 
-    278 Mflops
+    time $s/loop_test 100000000
+    n=100000000, sum=887459712
+    real    0m0.273s
+    user    0m0.269s
+    sys 0m0.002s
 
+    100/0.273 = 370 Mlps
