@@ -1,7 +1,5 @@
 #!/bin/bash
 
-script=`basename $0`
-
 install=false
 
 while [ $# -gt 0 ]; do
@@ -32,10 +30,11 @@ topdir=${TOPDIR:-$(rpmbuild --eval %_topdir)_$(hostname)}
 [ -d $topdir/SRPMS ] || mkdir -p $topdir/SRPMS
 [ -d $topdir/RPMS ] || mkdir -p $topdir/RPMS
 
-log=`mktemp /tmp/${script}_XXXXXX.log`
-tmpspec=`mktemp /tmp/${script}_XXXXXX.spec`
-awkcom=`mktemp /tmp/${script}_XXXXXX.awk`
-trap "{ rm -f $log $tmpspec $awkcom; }" EXIT
+log=$(mktemp /tmp/${0##*/}_XXXXXX.log)
+tmpspec=$(mktemp /tmp/${0##*/}_XXXXXX.spec)
+awkcom=$(mktemp /tmp/${0##*/}_XXXXXX.awk)
+tmpdir=$(mktemp -d /tmp/${0##*/}_XXXXXX)
+trap "{ rm -rf $log $tmpspec $awkcom $tmpdir; }" EXIT
 
 set -o pipefail
 
@@ -85,11 +84,21 @@ EOD
 # git convention is that the subject line is supposed to be 50 or shorter
 git log --max-count=100 --date-order --format="%H%n* %cd %aN%n- %s%n" --date=local ${sincetag}.. | sed -r 's/[0-9]+:[0-9]+:[0-9]+ //' | sed -r 's/(^- .{,60}).*/\1/' | awk --re-interval -f $awkcom | cat ${pkg}.spec - > $tmpspec
 
-# use transform to add package-version path in front of file names
+
+# add package-version path in front of file names
+pdir=${pkg}-${version}
+mkdir $tmpdir/$pdir
+rsync -a redboot-* \
+        titan_deb8_root*.img.xz \
+        titan_fis_rb_*.img \
+        viper_deb8_root*.img.xz \
+        viper_fis_rb_*.img $tmpdir/$pdir
+
+# root images are commited into git as compressed .xz
+unxz $tmpdir/$pdir/*.xz
+
 tar czf $topdir/SOURCES/${pkg}-${version}.tar.gz \
-    --transform="s,^\(.\),$pkg-$version/\1," \
-        redboot-* titan_deb8_root*.img titan_fis_rb_*.img \
-        viper_deb8_root*.img || exit $?
+    -C $tmpdir ${pkg}-${version} || exit $?
 
 rpmbuild -bb \
     --define "gitversion $version" --define "releasenum $release" \

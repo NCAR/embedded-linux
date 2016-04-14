@@ -8,7 +8,8 @@ Url: http://github.com/ncareol/embedded-armel
 Packager: %{packager}
 Vendor: UCAR
 BuildArch: noarch
-Requires: xinetd tftp-server ael-local-dpkgs >= 1.0-29
+Requires: xinetd tftp-server
+Obsoletes: ael-local-dpkgs < 1.0-29
 Source: %{name}-%{version}.tar.gz
 
 %define _binaries_in_noarch_packages_terminate_build 0
@@ -35,8 +36,7 @@ install Linux on the armel systems.
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/var/lib/tftpboot
-mv redboot-* titan_deb8_root*.img titan_fis_rb_*.img viper_deb8_root*.img \
-       $RPM_BUILD_ROOT/var/lib/tftpboot
+mv redboot-* *.img $RPM_BUILD_ROOT/var/lib/tftpboot
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -168,5 +168,6 @@ exit 0
 /var/lib/tftpboot/titan_deb8_root_*.img
 /var/lib/tftpboot/titan_fis_rb_*.img
 /var/lib/tftpboot/viper_deb8_root_*.img
+/var/lib/tftpboot/viper_fis_rb_*.img
 
 %changelog
