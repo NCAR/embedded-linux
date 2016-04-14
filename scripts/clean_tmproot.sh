@@ -1,8 +1,6 @@
 #!/bin/sh
 
-# remove some content from tmpdir
-
-tmpdir=${0%/*}
+# remove some content from a Linux root directory
 
 if [ $# -lt 1 ]; then
     echo "Usage ${0##*/} dir"
@@ -21,7 +19,7 @@ sudo rm -rf etc/udev/rules.d/70-persistent-net.rules \
     root/.viminfo root/.bash_history \
     .viminfo .bash_history \
     etc/apt/sources.list.d/eol.list \
-    etc/ssh/*_key*
+    etc/ssh/*_key* etc/arcom-release
 
 tmpfile=$(mktemp /tmp/${0##*/}_XXXXXX)
 trap "{ rm -f $tmpfile; }" EXIT
@@ -35,7 +33,7 @@ deb http://ftp.us.debian.org/debian/ jessie main
 deb http://security.debian.org/ jessie/updates main
 
 # jessie-updates, previously known as 'volatile'
-# deb http://ftp.us.debian.org/debian/ jessie-updates main
+deb http://ftp.us.debian.org/debian/ jessie-updates main
 EOL
 
 sudo cp $tmpfile etc/apt/sources.list

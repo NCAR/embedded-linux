@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# copy an image from a flash device
+
 if [ $# -lt 2 ]; then
     echo "Usage ${0##*/} device imagefile"
     exit 1

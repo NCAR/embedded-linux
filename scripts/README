@@ -1,0 +1,94 @@
+Scripts for handing file system images.
+
+Some of these scripts are fairly simple, such as just using tar, but they use sudo
+and the right options to make sure all files are copied and file
+ownership and permissions are kept.
+
+Scripts for manipuplating JFFS2 images of Linux root file system:
+    These images are for the on-board, "soldered" flash of Titans and Vipers.
+
+    These images can be copied from the Titan/Viper using nc (netcat), as documented
+    at https://github.com/ncareol/embedded-armel/wiki/Saving-Images.
+
+    These images are written back to the Titan/Viper using RedBoot, as documented
+    at https://github.com/ncareol/embedded-armel/wiki/Installing-Images-on-a-Titan
+    and https://github.com/ncareol/embedded-armel/wiki/Installing-Images-on-a-Viper.
+
+    When the JFFS2 root file system is written to a local directory, we call that
+    directory a "tmproot". One can make changes there and then generate a new
+    JFFS2 image, or a tarball backup.
+
+    clean_tmproot.sh tmproot
+        From tmproot, clean off junk
+
+    jffs2_to_tmproot.sh image tmproot
+        mount a JFFS2 image read-only, rsync it to a local directory, the "tmproot",
+        and umount the image. This uses mount_jffs2_image.sh/
+
+    tmproot_to_jffs2.sh viper|titan tmproot image
+        Use the mkfs.jffs2 command to create a JFFS2 image from a tmproot directory.
+        This is a better way to create a JFFS2 image, rather than writing to a mounted
+        JFFS2 image.
+
+    tmproot_to_tarball.sh tmproot tarball
+        Make a tarball backup of a tmproot directory.
+
+    mount_jffs2_image.sh image mountpoint
+        mount a JFFS2 file system image read-only. This script is used
+        by jffs2_to_tmproot.sh. This script uses the mtdram and mtdblock
+        kernel modules, available on Debian or RHEL6 (not 7) systems.
+        This image is mounted read-only.  If instead you mount it read/write and
+        make changes, the changes will be written to the image on a umount,
+        but for some reason there was less free space.  So the best way to make
+        updates to a JFFS2 is to use jffs2_to_tmproot.sh and tmproot_to_jffs2.sh.
+
+
+Scripts for "ext" images on CF or SD flash drives
+
+    extract_image.sh device image
+        grab a bmaptool image from an unmounted CF or SD media
+
+    format_ext_disk.sh device [sizeMiB]
+        Partition and create ext4 file system(s) on a CF or SD.
+        If sizeMiB is not specified, one partition is created, using the entire space.
+        Otherwise, a first partition of that size is created, and a second
+        uses the rest of the space on the drive.
+
+    partition_media.sh device [sizeMiB]
+        Called by format_ext_disk.sh to create partitions.
+
+    backup_ext_media.sh mountpoint tarball
+        create a tar of the /usr,/var and /opt directories on a CF or SD
+
+    restore_ext_media.sh tarball mountpoint
+        untar a tarball back to a mounted CF or SD
+
+Example:
+Creating a Viper bmaptool image for a CF disk from a tarball:
+
+# Insert CF. Wait a few seconds for it to auto-mount.
+# Determine the device name(s) of the partitions.
+# In this example they were /dev/sdc1 and /dev/sdc2
+mount | fgrep media
+
+# umount all partitions
+umount /dev/sdc?
+
+# Create bare CF, 850Mib in first partition.
+# This clears off the CF - make sure there is nothing valuable there
+../scripts/format_ext_disk.sh /dev/sdc 850
+
+# remove CF, re-insert. Wait for system to auto-mount
+# In this example it was mounted at /run/media/maclean/root
+mount | fgrep media
+
+# Untar a backup to the root partition. This may report a bunch of
+# "time stamp 2016-04-30 19:06:51 is xxx.yyy s in the future" which you can ignore.
+../scripts/restore_ext_media.sh viper_deb8_ext_20160313.tar.xz /run/media/maclean/root
+
+# unmount all partitions again
+umount /dev/sdc?
+
+# create bmaptool image of whole CF
+../scripts/extract_image.sh /dev/sdc viper_deb8_ext_$(date +%Y%m%d).img.xz
+

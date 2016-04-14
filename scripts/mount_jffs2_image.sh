@@ -23,7 +23,7 @@ sudo modprobe mtdram total_size=$tsize erase_size=128
 sudo modprobe mtdblock
 sudo dd if=$iimage of=/dev/mtdblock0
 
-sudo mount -t jffs2 /dev/mtdblock0 $mntpt
+sudo mount -t jffs2 -o ro /dev/mtdblock0 $mntpt
 
 echo "$iimage mounted at $mntpt"
 
