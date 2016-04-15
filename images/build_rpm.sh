@@ -63,7 +63,7 @@ release=${release%-*}       # 14
 author=$(git log -n 1 --format="%an <%aE>" .)
 
 # run git describe on each hash to create a version
-cat <<-\EOD > $awkcom
+cat <<- \EOD > $awkcom
     /^[0-9a-f]{7}/ {
     cmd = "git describe --match '[vV][0-9]*' " $0 " 2>/dev/null"
     res = (cmd | getline version)
@@ -92,9 +92,11 @@ rsync -a redboot-* \
         titan_deb8_root*.img.xz \
         titan_fis_rb_*.img \
         viper_deb8_root*.img.xz \
-        viper_fis_rb_*.img $tmpdir/$pdir
+        viper_fis_rb_*.img \
+        $tmpdir/$pdir
 
 # root images are commited into git as compressed .xz
+# uncompress them
 unxz $tmpdir/$pdir/*.xz
 
 tar czf $topdir/SOURCES/${pkg}-${version}.tar.gz \

@@ -28,7 +28,10 @@ save_all() {
 }
 
 # do a build if any of the files have changed
-files=(armel-images.spec build_rpm.sh titan_*.img viper_*.img redboot-titan* redboot-viper*)
+files=(armel-images.spec build_rpm.sh \
+    titan_*.img titan_*.img.xz \
+    viper_*.img viper_*.img.xz \
+    redboot-titan* redboot-viper*)
 
 if ! check_all ${files[*]} > /dev/null; then
     ./build_rpm.sh -i && save_all ${files[*]}
