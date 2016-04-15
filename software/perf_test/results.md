@@ -6,9 +6,9 @@ float_test and loop_test provide a rough test of relative performance. These are
 | System | OS | float_test time | Mflops | speedup | loop_test time | Mlps | speedup |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Viper ARMv5, PXA255, 400MHz| AEL v4i2b | 1m45.5s | 0.19 | 1x | 4.6s | 22 | 1x |
-| Titan ARMv5, PXA270, 520MHz | AEL v4i5 |  1m40s | 0.20 | 1.05 | | | |
+| Titan ARMv5, PXA270, 520MHz | AEL v4i5 |  1m40s | 0.20 | 1.05x | | | |
 | Viper ARMv5, PXA255, 400MHz | Debian 8, EABI | 21.0s | 0.95 | 5x | 4.5s | 22 | 1x |
-| Titan ARMv5, PXA270, 520MHz | Debian 8, EABI | 19.7s | 1.01 | | 4.1s |  24 | 1.1x |
+| Titan ARMv5, PXA270, 520MHz | Debian 8, EABI | 19.7s | 1.01 | 5.3x | 4.1s |  24 | 1.1x |
 | Intel 3.0 GHz | Fedora 23 | 0.07s | 278 | 1507x | 0.273s | 370 | 16.8x |
 
 The Mflops values were computed assuming there were two floating point operations (divide and sum) in each loop in float_test, and ignoring the other overhead in the loop.
