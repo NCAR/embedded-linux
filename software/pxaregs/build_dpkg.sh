@@ -47,6 +47,12 @@ sdir=$PWD
 args="-a$arch"
 karg=
 if $sign; then
+    export GPG_AGENT_INFO
+    if [ -e $HOME/.gpg-agent-info ]; then
+        . $HOME/.gpg-agent-info
+    else
+        echo "Warning: $HOME/.gpg-agent-info not found"
+    fi
     karg=-k"$key"
 else
     args="$args -us -uc"
