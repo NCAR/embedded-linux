@@ -6,7 +6,6 @@ if [ $# -lt 2 ]; then
     echo "Usage: $0 mountpoint tarfile"
     echo "mountpoint: where SD/CF media is mounted"
     echo "A tar backup called  <tarfile>.xz will be created"
-    echo "Note this script should be run from root or sudo"
     exit 1
 fi
 
@@ -28,8 +27,6 @@ while [ $# -gt 0 ]; do
 done
 
 set -e
-
-mount | fgrep $mntpt
 
 excfile=$(mktemp /tmp/${0##*/}_XXXXXX)
 tmptar=$(mktemp /tmp/${0##*/}_XXXXXX).tar.xz
@@ -60,7 +57,7 @@ EOD
 # change things, then create the tar
 
 pushd $mntpt > /dev/null
-sudo rsync -a --exclude=from=$excfile var usr opt $tmpdir
+sudo rsync -a --exclude-from=$excfile var usr opt $tmpdir
 
 pushd $tmpdir > /dev/null
 
@@ -68,6 +65,7 @@ pushd $tmpdir > /dev/null
 cat /dev/null > $tmpfile
 
 sudo cp $tmpfile var/log/lastlog
+[ -d var/lib/dbus ] || sudo mkdir var/lib/dbus
 
 sudo tar cJf $tmptar opt usr var
 

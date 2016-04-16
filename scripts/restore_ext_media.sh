@@ -27,8 +27,8 @@ done
 
 set -e
 
-if ! mount | fgrep -q $mntpt; then
-    echo "$mntpt does not seem to be mounted"
+if ! [ -d $mntpt ]; then
+    echo "$mntpt does not exist"
     exit 1
 fi
 
