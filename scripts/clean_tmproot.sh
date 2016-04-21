@@ -16,7 +16,7 @@ cd $tmpdir
 sudo rm -rf etc/udev/rules.d/70-persistent-net.rules \
     usr/* var/* opt/* \
     root/* root/.ssh/known_hosts root/.ssh/authorized_keys* \
-    root/.viminfo root/.bash_history \
+    root/.viminfo root/.bash_history root/.vim/* \
     .viminfo .bash_history \
     etc/apt/sources.list.d/eol.list \
     etc/ssh/*_key* etc/arcom-release

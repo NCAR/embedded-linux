@@ -115,10 +115,10 @@ rpms=`egrep '^Wrote:' $log | egrep RPMS/ | awk '{print $2}'`
 echo "rpms=$rpms"
 
 if $install && [ -d $rroot ]; then
-echo "Moving rpms to $rroot"
-copy_rpms_to_eol_repo $rpms
-else
-echo "-i or -r options not specified. RPMS will not be installed"
+    echo "Moving rpms to $rroot"
+    copy_rpms_to_eol_repo $rpms
+    else
+    echo "-i or -r options not specified. RPMS will not be installed"
 fi
 
 # print out warnings: and the following file list
