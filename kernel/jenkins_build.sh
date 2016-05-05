@@ -43,28 +43,33 @@ git_kernel_version() {
 kernelver=$(git_kernel_version);
 
 check_all() {
+    local mach=$1
+    shift
     for f in $@; do
         check_md5 $f || return 1
     done
-    [ -f .kernel_version ] && kernelverprev=$(< .kernel_version)
+    [ -f .${mach}_kernel_version ] && kernelverprev=$(< .${mach}_kernel_version)
     [ "$kernelverprev" == "$kernelver" ] || return 1
     return 0
 }
 
 save_all() {
+    local mach=$1
+    shift
     for f in $@; do
         save_md5 $f
     done
-    echo $kernelver > .kernel_version
+    echo $kernelver > .${mach}_kernel_version
 }
 
 # Complain early if gpg-agent file can't be found
 [ -e $HOME/.gpg-agent-info ] || echo "Warning: $HOME/.gpg-agent-info not found"
 
 # do a build if the config file, the build script or the kernel have changed.
-for file in config-3.16-titan config-3.16-viper; do
-    if ! check_all $file build_dpkg.sh > /dev/null; then
-        ./build_dpkg.sh -s -i $repo $file && save_all $file build_dpkg.sh
+for mach in titan viper; do
+    file=config-3.16-$mach
+    if ! check_all $mach $file build_dpkg.sh > /dev/null; then
+        ./build_dpkg.sh -s -i $repo $file && save_all $mach $file build_dpkg.sh
     else
         echo "No changes to $file, build_dpkg.sh or linux-stable-armel since last build"
     fi
