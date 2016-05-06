@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # Build armel-images RPM if anything has changed
 
@@ -15,9 +15,5 @@ if [ "$this_hash" == "$last_hash" ]; then
     exit 0
 fi
 
-if ! check_all ${files[*]} > /dev/null; then
-    ./build_rpm.sh -i &&  echo $this_hash > $hashfile
-else
-    echo "No commits to $PWD since last build"
-fi
+./build_rpm.sh -i &&  echo $this_hash > $hashfile
 
