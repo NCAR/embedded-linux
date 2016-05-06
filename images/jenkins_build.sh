@@ -2,40 +2,22 @@
 
 # Build armel-images RPM if anything has changed
 
-check_md5() {
-    local file=$1
-    local sumfile=.${file}_md5sum
-    md5sum --quiet --check $sumfile 2>/dev/null
-    return $?
-}
-save_md5() {
-    local file=$1
-    local sumfile=.${file}_md5sum
-    md5sum $file > $sumfile
-}
+# directory containing script
+srcdir=$(readlink -f ${0%/*})
+cd $srcdir
+hashfile=.last_hash
 
-check_all() {
-    for f in $@; do
-        check_md5 $f || return 1
-    done
-    return 0
-}
+[ -f $hashfile ] && last_hash=$(cat $hashfile)
+this_hash=$(git log -1 --format=%H .)
 
-save_all() {
-    for f in $@; do
-        save_md5 $f
-    done
-}
-
-# do a build if any of the files have changed
-files=(armel-images.spec build_rpm.sh \
-    titan_*.img titan_*.img.xz \
-    viper_*.img viper_*.img.xz \
-    redboot-titan* redboot-viper*)
+if [ "$this_hash" == "$last_hash" ]; then
+    echo "No commits in $PWD since last build"
+    exit 0
+fi
 
 if ! check_all ${files[*]} > /dev/null; then
-    ./build_rpm.sh -i && save_all ${files[*]}
+    ./build_rpm.sh -i &&  echo $this_hash > $hashfile
 else
-    echo "No changes to ${files[*]} since last build"
+    echo "No commits to $PWD since last build"
 fi
 
