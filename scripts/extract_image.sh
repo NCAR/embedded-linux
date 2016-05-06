@@ -30,6 +30,8 @@ bmaptool create -o $bmapfile $tmpfile2
 
 bmaptool copy --bmap $bmapfile $tmpfile2 $dest
 
+echo "Compressing. This will take some time..."
+
 $doxz && xz $dest
 
 cp $bmapfile ${dest%.*}.bmap
