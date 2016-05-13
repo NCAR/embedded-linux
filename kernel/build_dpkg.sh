@@ -44,9 +44,9 @@ fi
 set -e
 
 usage() {
-    echo "Usage: ${1##*/} [-c] [-s] [-i repository ] [-v N] config_file"
-    echo "-n: don't do a distclean before build"
+    echo "Usage: ${1##*/} [-n] [-s] [-i repository ] [-v N] config_file"
     echo "-i: install them with reprepro to the repository"
+    echo "-n: don't do a distclean before build"
     echo "-s: sign the package files with $key"
     echo "-v N: verbosity, default=0"
     exit 1
