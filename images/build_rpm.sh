@@ -1,16 +1,5 @@
 #!/bin/bash
 
-install=false
-
-while [ $# -gt 0 ]; do
-    case $1 in
-        -i)
-            install="true"
-            ;;
-    esac
-    shift
-done
-
 rroot=unknown
 rf=repo_scripts/repo_funcs.sh
 [ -f $rf ] || rf=/net/www/docs/software/rpms/scripts/repo_funcs.sh
@@ -113,13 +102,6 @@ echo "RPMS:"
 egrep "^Wrote:" $log
 rpms=`egrep '^Wrote:' $log | egrep RPMS/ | awk '{print $2}'`
 echo "rpms=$rpms"
-
-if $install && [ -d $rroot ]; then
-    echo "Moving rpms to $rroot"
-    copy_rpms_to_eol_repo $rpms
-    else
-    echo "-i or -r options not specified. RPMS will not be installed"
-fi
 
 # print out warnings: and the following file list
 sed -n '

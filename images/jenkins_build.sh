@@ -15,5 +15,5 @@ if [ "$this_hash" == "$last_hash" ]; then
     exit 0
 fi
 
-./build_rpm.sh -i &&  echo $this_hash > $hashfile
+./build_rpm.sh &&  echo $this_hash > $hashfile
 
