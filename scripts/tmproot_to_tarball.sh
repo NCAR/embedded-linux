@@ -18,7 +18,7 @@ fi
 
 set -e
 
-tartmp=$(mktemp /tmp/${0##*/}_XXXXXX).tar.xz
+tartmp=$(mktemp --tmpdir ${0##*/}_XXXXXX).tar.xz
 trap "{ rm -f $tartmp; }" EXIT
 
 cd $dir

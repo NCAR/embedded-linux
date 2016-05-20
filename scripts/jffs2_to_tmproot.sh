@@ -23,7 +23,7 @@ set -e
 
 mkdir -p $dir
 
-mntpt=$(mktemp -d /tmp/${0##*/}_XXXXXX)
+mntpt=$(mktemp -d --tmpdir ${0##*/}_XXXXXX)
 trap "{ rmdir $mntpt; }" EXIT
 
 $sdir/mount_jffs2_image.sh $iimage $mntpt

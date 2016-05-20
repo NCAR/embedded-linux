@@ -69,8 +69,8 @@ fi
 
 sudo partprobe $dev
 
-tmpfile=$(mktemp /tmp/${script}_XXXXXX)
-sffile=$(mktemp /tmp/${script}_XXXXXX)
+tmpfile=$(mktemp --tmpdir ${script}_XXXXXX)
+sffile=$(mktemp --tmpdir ${script}_XXXXXX)
 trap "{ rm -f $tmpfile $sffile; }" EXIT
 
 repart=false

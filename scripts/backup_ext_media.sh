@@ -28,10 +28,10 @@ done
 
 set -e
 
-excfile=$(mktemp /tmp/${0##*/}_XXXXXX)
-tmptar=$(mktemp /tmp/${0##*/}_XXXXXX).tar.xz
-tmpdir=$(mktemp -d /tmp/${0##*/}_XXXXXX)
-tmpfile=$(mktemp /tmp/${0##*/}_XXXXXX)
+excfile=$(mktemp --tmpdir ${0##*/}_XXXXXX)
+tmptar=$(mktemp --tmpdir ${0##*/}_XXXXXX).tar.xz
+tmpdir=$(mktemp -d --tmpdir ${0##*/}_XXXXXX)
+tmpfile=$(mktemp --tmpdir ${0##*/}_XXXXXX)
 trap "{ rm -f $excfile $tmptar $tmpfile; }" EXIT
 
 # don't backup these directories or files

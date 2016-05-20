@@ -32,7 +32,7 @@ fi
 
 set -e
 
-tmpimg=$(mktemp /tmp/${0##*/}_XXXXXX)
+tmpimg=$(mktemp --tmpdir ${0##*/}_XXXXXX)
 trap "{ sudo rm -rf $tmpimg; }" EXIT
 
 declare -A pad

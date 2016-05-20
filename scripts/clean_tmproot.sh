@@ -21,7 +21,7 @@ sudo rm -rf etc/udev/rules.d/70-persistent-net.rules \
     etc/apt/sources.list.d/eol.list \
     etc/ssh/*_key* etc/arcom-release
 
-tmpfile=$(mktemp /tmp/${0##*/}_XXXXXX)
+tmpfile=$(mktemp --tmpdir ${0##*/}_XXXXXX)
 trap "{ rm -f $tmpfile; }" EXIT
 
 cat /dev/null > $tmpfile

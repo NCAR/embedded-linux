@@ -17,9 +17,9 @@ doxz=false
 
 $doxz && dest=${dest%.*}
 
-tmpfile=$(mktemp /tmp/${0##*/}_XXXXXX.img)
-tmpfile2=$(mktemp /tmp/${0##*/}_XXXXXX.img)
-bmapfile=$(mktemp /tmp/${0##*/}_XXXXXX.bmap)
+tmpfile=$(mktemp --tmpdir ${0##*/}_XXXXXX.img)
+tmpfile2=$(mktemp --tmpdir ${0##*/}_XXXXXX.img)
+bmapfile=$(mktemp --tmpdir ${0##*/}_XXXXXX.bmap)
 trap "{ rm -f $tmpfile $tmpfile2 $bmapfile; }" EXIT
 
 sudo dd if=$dev of=$tmpfile bs=4M
