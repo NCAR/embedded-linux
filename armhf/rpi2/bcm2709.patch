@@ -1,0 +1,62 @@
+--- a/arch/arm/mach-bcm2709/bcm2709.c
++++ b/arch/arm/mach-bcm2709/bcm2709.c
+@@ -38,6 +38,8 @@
+ 
+ #include <linux/broadcom/vc_cma.h>
+ 
++#include <linux/pps-gpio.h>
++
+ /* Effectively we have an IOMMU (ARM<->VideoCore map) that is set up to
+  * give us IO access only to 64Mbytes of physical memory (26 bits).  We could
+  * represent this window by setting our dmamasks to 26 bits but, in fact
+@@ -111,6 +113,22 @@ void __init bcm2709_map_io(void)
+        iotable_init(bcm2709_io_desc, ARRAY_SIZE(bcm2709_io_desc));
+ }
+ 
++/* PPS-GPIO platform data */
++static struct pps_gpio_platform_data pps_gpio_info = {
++       .assert_falling_edge = false,
++       .capture_clear = false,
++       .gpio_pin = 25,
++       .gpio_label = "PPS",
++};
++
++static struct platform_device pps_gpio_device = {
++       .name = "pps-gpio",
++       .id = -1,
++       .dev = {
++               .platform_data = &pps_gpio_info
++       },
++};
++
+ int calc_rsts(int partition)
+ {
+        return PM_PASSWORD |
+@@ -187,6 +205,18 @@ static void __init bcm2709_init_uart1(void)
+        }
+ }
+ 
++int __init bcm_register_device(struct platform_device *pdev)
++{
++        int ret;
++
++        ret = platform_device_register(pdev);
++        if (ret)
++                pr_debug("Unable to register platform device '%s': %d\n",
++                         pdev->name, ret);
++
++        return ret;
++}
++
+ void __init bcm2709_init(void)
+ {
+        int ret;
+@@ -204,6 +234,8 @@ void __init bcm2709_init(void)
+ 
+        bcm2709_init_uart1();
+ 
++       bcm_register_device(&pps_gpio_device);
++
+        system_rev = boardrev;
+        system_serial_low = serial;
+ }
