@@ -1,0 +1,13 @@
+build_dpkg.sh is a script to build a Debian package of chrony.
+
+The idea is to build chrony on a system with the pps-tools installed, so that
+chrony is built against /usr/include/sys/time-pps.h and will therefore
+contain a PPS reference driver.
+
+Then on a data system, create an apt-get preferences file called
+/etc/apt/preferences.d/chrony.conf, looking like so:
+
+Explanation: Make sure we get chrony from the EOL repository
+Package: chrony
+Pin: release l=EOL
+Pin-Priority: 1001
