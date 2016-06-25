@@ -3,3 +3,4 @@ i2c.patch
 munmap.patch
 serial.patch
 usb.patch
+pxa270.patch
