@@ -192,4 +192,21 @@ The floating point performance of the ARMv5s is still much slower proportionatel
     Hardware	: BCM2709
     Revision	: a21041
 
+    time ./float_test_armhf 10000000
+    n=10000000, sum=16.6953
+
+    real	0m0.883s
+    user	0m0.880s
+    sys	0m0.000s
+    
+    time ./loop_test_armhf 100000000
+    n=100000000, sum=887459712
+
+    real	0m2.354s
+    user	0m2.360s
+    sys	0m0.000s
+
+    
+    
+
 
