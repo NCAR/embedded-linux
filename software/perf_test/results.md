@@ -9,6 +9,7 @@ float_test and loop_test provide a rough test of relative performance. These are
 | Titan ARMv5, PXA270, 520MHz | AEL v4i5 |  1m40s | 0.20 | 1.05x | | | |
 | Viper ARMv5, PXA255, 400MHz | Debian 8, EABI | 21.0s | 0.95 | 5x | 4.5s | 22 | 1x |
 | Titan ARMv5, PXA270, 520MHz | Debian 8, EABI | 19.7s | 1.01 | 5.3x | 4.1s |  24 | 1.1x |
+| RPi2, ARMv7,                | Raspbian 8 | 0.9s | 22.5 | 112x | 2.4s | 42 | 1.9x |
 | Intel 3.0 GHz | Fedora 23 | 0.07s | 278 | 1507x | 0.273s | 370 | 16.8x |
 
 The Mflops values were computed assuming there were two floating point operations (divide and sum) in each loop in float_test, and ignoring the other overhead in the loop.
@@ -182,3 +183,13 @@ The floating point performance of the ARMv5s is still much slower proportionatel
     sys 0m0.002s
 
     100/0.273 = 370 Mlps, 16.8 times faster than Viper
+    
+## Raspberry Pi 2 Model B
+
+    Linux pi1 4.4.13-v7+
+    model name	: ARMv7 Processor rev 5 (v7l)
+    BogoMIPS	: 38.40
+    Hardware	: BCM2709
+    Revision	: a21041
+
+
