@@ -95,6 +95,10 @@ debver=${debver%-g*}    # remove trailing -gXXXXX
 
 cd linux-stable-armel
 
+$distclean && make ARCH=arm distclean
+
+cp ../$config .config
+
 # version number of linux-stable-armel
 kdebver=$(git describe --match '[vV][0-9]*' 2>/dev/null)
 kdebver=${kdebver/#v/}    # remove leading v
@@ -108,10 +112,6 @@ rm -f ../linux-firmware-image-${kver}-*_${debarch}.deb \
     ../linux-headers-${kver}-*_${debarch}.deb \
     ../linux-image-${kver}-*_${debarch}.deb \
     ../linux-libc-dev_*_${debarch}.deb
-
-$distclean && make ARCH=arm distclean
-
-cp ../$config .config
 
 make ARCH=arm oldconfig
 
