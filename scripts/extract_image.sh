@@ -12,6 +12,8 @@ dest=$2
 
 set -e
 
+[[ $dest =~ /.* ]] || dest=$PWD/$dest
+
 doxz=false
 [ ${dest##*.} == xz ] && doxz=true
 
@@ -35,4 +37,5 @@ echo "Compressing. This will take some time..."
 $doxz && xz $dest
 
 cp $bmapfile ${dest%.*}.bmap
+chmod +rw ${dest%.*}.bmap
 
