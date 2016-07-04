@@ -1,5 +1,6 @@
 #!/bin/sh
 
+set -x
 # copy an image from a flash device
 
 if [ $# -lt 2 ]; then
@@ -19,6 +20,13 @@ doxz=false
 
 $doxz && dest=${dest%.*}
 
+fs="$(mount | grep "^$dev" | awk '{print $3}')"
+
+if [ -n "$fs" ]; then
+    echo "Umounting file systems on $dev
+    umount $(mount | grep "^$dev" | awk '{print $3}')
+fi
+
 tmpfile=$(mktemp --tmpdir ${0##*/}_XXXXXX.img)
 tmpfile2=$(mktemp --tmpdir ${0##*/}_XXXXXX.img)
 bmapfile=$(mktemp --tmpdir ${0##*/}_XXXXXX.bmap)
@@ -30,11 +38,9 @@ cp --sparse=always $tmpfile $tmpfile2
 
 bmaptool create -o $bmapfile $tmpfile2
 
-bmaptool copy --bmap $bmapfile $tmpfile2 $dest
-
 echo "Compressing. This will take some time..."
 
-$doxz && xz $dest
+$doxz && xz -c $tmpfile2 > $dest.xz
 
 cp $bmapfile ${dest%.*}.bmap
 chmod +rw ${dest%.*}.bmap
