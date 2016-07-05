@@ -111,6 +111,7 @@ if $use_chroot; then
         [ -f $HOME/.gpg-agent-info ] && . $HOME/.gpg-agent-info
         export GPG_AGENT_INFO
         export CC=$CC
+        # export DEB_BUILD_OPTIONS="--enable-debug"
         dpkg-buildpackage -a $arch -b
 EOD
 fi
@@ -123,8 +124,6 @@ if [ -n "$repo" ]; then
     pkgs=$(grep "^Binary:" $chngs | sed 's/Binary: //')
 
     flock $repo sh -c "
-        reprepro -V -b $repo remove jessie $pkgs;
-        reprepro -V -b $repo deleteunreferenced;
         reprepro -V -b $repo include jessie $chngs"
 
     rm -f chrony_*_$arch.build chrony_*.dsc chrony_*.tar.?z chrony*_all.deb chrony*_$arch.deb $chngs
