@@ -1,6 +1,5 @@
 #!/bin/sh
 
-set -x
 # copy an image from a flash device
 
 if [ $# -lt 2 ]; then
@@ -23,7 +22,7 @@ $doxz && dest=${dest%.*}
 fs="$(mount | grep "^$dev" | awk '{print $3}')"
 
 if [ -n "$fs" ]; then
-    echo "Umounting file systems on $dev
+    echo "Umounting file systems on $dev"
     umount $(mount | grep "^$dev" | awk '{print $3}')
 fi
 
