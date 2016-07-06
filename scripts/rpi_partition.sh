@@ -38,7 +38,7 @@ w
 EOD
 
 resize2fs ${fdev}p2
-mkfs.ext4 ${fdev}p3
+mkfs.ext4 -F ${fdev}p3
 
 
 
