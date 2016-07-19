@@ -38,10 +38,12 @@ lastsect=$(awk 'ENDFILE{print $3}' $tmpfile)
 
 blocksize=512
 count=$lastsect
-for fact in 5 10 20 50 100 200 500; do
+fact=10
+while [ $blocksize -lt 4194304 ]; do	# 4M
     [ $(( $lastsect % $fact )) -ne 0 ] && break
     blocksize=$(( 512 * $fact ))
     count=$(( $lastsect / $fact ))
+    fact=$(( $fact * 2 ))
 done
 
 echo "Extracting image, #sectors=$lastsect, blocksize=$blocksize, count=$count"
@@ -52,7 +54,6 @@ cp --sparse=always $tmpfile $tmpfile2
 
 echo "Creating bmap file"
 bmaptool create -o $bmapfile $tmpfile2
-
 
 if $doxz; then
     echo "Compressing. This will take some time..."
