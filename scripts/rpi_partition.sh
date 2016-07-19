@@ -5,12 +5,26 @@ if [ $# -lt 2 ]; then
     echo "p2size is something like 4G"
     exit 1
 fi
+
 fdev=$1
 sizep2=$2
 
-startp2=$(fdisk -l $fdev  | grep ${fdev}p2 | awk '{print $2}')
+# Leave some space at the end of the disk, so that
+# the image can be copied to slightly smaller SDs.
+# one sector=512 bytes
+unused_sectors=20
 
-fdisk $fdev << EOD
+tmpfile=$(mktemp)
+trap "{ rm -f $tmpfile; }" EXIT
+
+fdisk -l $fdev > $tmpfile || exit 1
+
+totsize=$(sed -n -r -e "/^Disk \/dev\/${fdev##*/}:/s/.* ([0-9]+) sectors/\1/p" $tmpfile)
+# echo "totsize=$totsize"
+startp2=$(grep ${fdev}p2  $tmpfile | awk '{print $2}')
+
+# delete partitions 2 and 3, create new partion 2 of requested size
+fdisk $fdev > /dev/null << EOD
 d
 3
 d
@@ -24,18 +38,19 @@ w
 EOD
 
 endp2=$(fdisk -l $fdev | grep ${fdev}p2 | awk '{print $3}')
-endp2=$(( $endp2 + 1 ))
+startp3=$(( $endp2 + 1 ))
+sizep3=$(( $totsize - $startp3 - $unused_sectors ))
 
-# echo $endp2
-
-fdisk $fdev << EOD
+fdisk $fdev > /dev/null << EOD
 n
 p
 3
-$endp2
-
+$startp3
++$sizep3
 w
 EOD
+
+fdisk -l $fdev
 
 resize2fs ${fdev}p2
 mkfs.ext4 -F ${fdev}p3
