@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 
 if [ $# -lt 2 ]; then
     echo "Usage ${0##*/} device p2size"
@@ -27,14 +27,18 @@ if [ $disk_size -lt $target_size ]; then
     exit 1
 fi
 
-startp2=$(grep ${fdev}p2  $tmpfile | awk '{print $2}')
+startp2=$(grep ${fdev}p2 $tmpfile | awk '{print $2}')
 
-# delete partitions 2 and 3, create new partion 2 of requested size
-fdisk $fdev > /dev/null << EOD
-d
-3
-d
-2
+# delete partitions 2 and above, create new partition 2 of requested size
+npart=$(grep "^$fdev" $tmpfile | wc -l)
+
+cat /dev/null > $tmpfile
+for (( n=$npart; n >= 2; n-- )); do
+    echo "d" >> $tmpfile
+    echo "$n" >> $tmpfile
+done
+
+cat << EOD >> $tmpfile
 n
 p
 2
@@ -43,11 +47,13 @@ $startp2
 w
 EOD
 
+fdisk $fdev > /dev/null < $tmpfile
+
 endp2=$(fdisk -l $fdev | grep ${fdev}p2 | awk '{print $3}')
 startp3=$(( $endp2 + 1 ))
 sizep3=$(( $target_size - $startp3 ))
 
-fdisk $fdev > /dev/null << EOD
+fdisk $fdev > /dev/null << EOD 
 n
 p
 3
