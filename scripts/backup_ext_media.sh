@@ -75,7 +75,7 @@ popd > /dev/null
 # $tmptar is owned and rw only by root
 sudo chmod ugo+r $tmptar
 
-cp $tmptar $tarfile
+cp $tmptar $tarfile.xz
 
 sudo rm $tmptar
 
