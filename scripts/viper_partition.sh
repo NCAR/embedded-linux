@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh -ex 
 
 if [ $# -lt 2 ]; then
     echo "Usage ${0##*/} device p1size"
@@ -9,16 +9,18 @@ fi
 fdev=$1
 sizep1=$2
 
+
 # How big to make the image. one sector=512 bytes
 # Use smallest size in sectors of target disks
 # 1GB SanDisk SDCFX-10: 2001888 sectors
 # 1GB Toshiba THNCF1G0: 2000880 sectors
-target_size=2000880
+# 1GB TRANSCEND:        1989792 sectors
+target_size=1989792
 
 tmpfile=$(mktemp)
 trap "{ rm -f $tmpfile; }" EXIT
 
-fdisk -l $fdev > $tmpfile || exit 1
+sudo fdisk -l $fdev > $tmpfile || exit 1
 
 disk_size=$(sed -n -r -e "/^Disk \/dev\/${fdev##*/}:/s/.* ([0-9]+) sectors/\1/p" $tmpfile)
 echo "target_size=$target_size sectors, size of this disk=$disk_size"
@@ -56,13 +58,15 @@ EOD
 
 cat $tmpfile
 
-fdisk $fdev > /dev/null < $tmpfile
+sudo fdisk $fdev > /dev/null < $tmpfile
 
-endp1=$(fdisk -l $fdev | grep ${fdev}1 | awk '{print $3}')
+endp1=$(sudo fdisk -l $fdev | grep ${fdev}1 | awk '{print $3}')
 startp2=$(( $endp1 + 1 ))
-sizep2=$(( $target_size - $startp2 ))
+sizep2=$(( $target_size - $startp2 - 1 ))
 
-fdisk $fdev > /dev/null << EOD 
+sleep 2
+
+sudo fdisk $fdev > /dev/null << EOD 
 n
 p
 2
@@ -71,8 +75,12 @@ $startp2
 w
 EOD
 
-fdisk -l $fdev
+sleep 2
 
-mkfs.ext4 -F ${fdev}1
-mkfs.ext4 -F ${fdev}2
+sudo partprobe -s $dev
+
+sudo fdisk -l $fdev
+
+sudo mkfs.ext4 -F ${fdev}1
+sudo mkfs.ext4 -F ${fdev}2
 
