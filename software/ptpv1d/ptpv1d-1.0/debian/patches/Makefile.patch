@@ -1,0 +1,38 @@
+Index: ptpv1d-1.0/Makefile
+===================================================================
+--- ptpv1d-1.0.orig/Makefile
++++ ptpv1d-1.0/Makefile
+@@ -1,17 +1,18 @@
+-# Root Makefile for ptpd, used for cutting releases
++# CC ?= gcc
+ 
+-VERSION = ptpd-1.1.0
++.PHONY: install clean
++
++all: src/ptpd
++
++src/ptpd:
++	cd src; make; cp ptpd.8 ptpv1d.8
++
++$(DESTDIR)/usr/sbin/ptpdv1: src/ptpd
++	install -d $(@D)
++	cp $< $@
++
++install: $(DESTDIR)/usr/sbin/ptpdv1
++
++clean:
++	rm -f src/*.o src/pdpd src/*.rej src/*.orig
+ 
+-release:
+-	(cd src; make clean)
+-	mkdir $(VERSION)
+-	(cd $(VERSION); \
+-	ln -s ../src .; \
+-	ln -s ../doc .; \
+-	ln -s ../tools .; \
+-	ln -s ../COPYRIGHT .; \
+-	ln -s ../ChangeLog .; \
+-	ln -s ../Makefile .; \
+-	ln -s ../README .; \
+-	ln -s ../RELEASE_NOTES .)
+-	tar cvzf $(VERSION).tar.gz -L --exclude .o --exclude Doxygen --exclude .svn --exclude .dep --exclude core $(VERSION)

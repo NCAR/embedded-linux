@@ -1,0 +1,28 @@
+Source: ptpv1d
+Section: admin
+Priority: optional
+Maintainer: Gordon Maclean <maclean@ucar.edu>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.6
+
+Package: ptpv1d
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: ptpd version 1
+ ptpd available from Debian supports version 2 of PTP. This package, ptpv1d,
+ supports the (obsolete) version 1 of the protocol, in order to support
+ V1 clients.
+ .
+ From description of ptpd:
+ Implements the Precision Time Protocol (PTP) as defined by the IEEE 1588-2008
+ standard. PTP was developed to provide very precise time coordination of LAN
+ connected computers.
+ .
+ PTPd is a complete implementation of the IEEE 1588 specification for a
+ standard (non-boundary) clock. PTPd has been tested with and is known to
+ work properly with other IEEE 1588 implementations. The source code for PTPd
+ is freely available under a BSD-style license. Thanks to contributions from
+ users, PTPd is becoming an increasingly portable, interoperable, and stable
+ IEEE 1588 implementation.
+
+

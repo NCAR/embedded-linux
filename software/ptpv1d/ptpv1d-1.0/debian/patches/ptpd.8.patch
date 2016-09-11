@@ -1,0 +1,17 @@
+Index: ptpv1d-1.0/src/ptpd.8
+===================================================================
+--- ptpv1d-1.0.orig/src/ptpd.8
++++ ptpv1d-1.0/src/ptpd.8
+@@ -1,9 +1,9 @@
+ .\" -*- nroff -*"
+-.TH ptpd 8 "August 9, 2010" "version 1.1.0" "Precision Time Protocol daemon"
++.TH ptpv1d 8 "August 9, 2010" "version 1.1.0" "Precision Time Protocol daemon"
+ .SH NAME
+-ptpd \- Precision Time Protocol daemon
++ptpv1d \- Precision Time Protocol daemon
+ .SH SYNOPSIS
+-.B ptpd
++.B ptpv1d
+ 
+ [-?]
+ [-c]
