@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ $# -lt 2 ]; then
-    echo "$0 repository arch
+    echo "$0 repository arch"
     exit 1
 fi
 
