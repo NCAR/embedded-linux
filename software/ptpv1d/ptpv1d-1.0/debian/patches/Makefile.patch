@@ -21,7 +21,7 @@ Index: ptpv1d-1.0/Makefile
 +install: $(DESTDIR)/usr/sbin/ptpv1d
 +
 +clean:
-+	rm -f src/*.o src/pdpd src/*.rej src/*.orig
++	rm -f src/*.o src/dep/*.o src/ptpd src/ptpv1d.8 src/*.rej src/*.orig
  
 -release:
 -	(cd src; make clean)
