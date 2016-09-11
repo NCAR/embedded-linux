@@ -60,10 +60,10 @@ fi
 
 rm -f ${pkg}_*_$arch.changes
 
-rm -rf ${pkg}-1.0
+# rm -rf ${pkg}-1.0
 
 tar xJf ${pkg}_1.0.orig.tar.xz
-cp -r debian ${pkg}-1.0
+# cp -r debian ${pkg}-1.0
 
 cd ${pkg}-1.0
 

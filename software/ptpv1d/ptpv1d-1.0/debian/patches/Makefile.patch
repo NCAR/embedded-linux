@@ -14,11 +14,11 @@ Index: ptpv1d-1.0/Makefile
 +src/ptpd:
 +	cd src; make; cp ptpd.8 ptpv1d.8
 +
-+$(DESTDIR)/usr/sbin/ptpdv1: src/ptpd
++$(DESTDIR)/usr/sbin/ptpv1d: src/ptpd
 +	install -d $(@D)
 +	cp $< $@
 +
-+install: $(DESTDIR)/usr/sbin/ptpdv1
++install: $(DESTDIR)/usr/sbin/ptpv1d
 +
 +clean:
 +	rm -f src/*.o src/pdpd src/*.rej src/*.orig
