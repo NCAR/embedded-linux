@@ -8,18 +8,6 @@ fi
 # repo=/net/ftp/pub/temp/users/maclean/debian
 repo=$1
 
-# Build kernel for a config file if the md5sum of
-# the config file has changed.
-
-# If you just change a simple thing like adding a kernel module
-# to the config and are confident that it won't break things on the
-# target system then you can make that change without changing
-# CONFIG_LOCALVERSION in the config file.
-
-# If you have made significant changes and you don't want the
-# new kernel to overwrite the old on the target system, then
-# also change CONFIG_LOCALVERSION in the config.
-
 tmpdir=$(mktemp -d /tmp/${0##*/}_XXXXXX)
 trap "{ rm -rf $tmpdir; }" EXIT
 
