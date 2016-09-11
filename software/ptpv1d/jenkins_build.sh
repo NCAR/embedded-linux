@@ -1,12 +1,13 @@
 #!/bin/sh
 
-if [ $# -lt 1 ]; then
-    echo "$0 repository"
+if [ $# -lt 2 ]; then
+    echo "$0 repository arch
     exit 1
 fi
 
 # repo=/net/ftp/pub/temp/users/maclean/debian
 repo=$1
+arch=$2
 
 tmpdir=$(mktemp -d /tmp/${0##*/}_XXXXXX)
 trap "{ rm -rf $tmpdir; }" EXIT
@@ -64,7 +65,7 @@ if ! $changed; then
     exit
 fi
 
-./build_dpkg.sh -s -i $repo armel || exit 1
+./build_dpkg.sh -s -i $repo $arch || exit 1
 
 for dir in $dirs; do
     save_md5_dir $dir
