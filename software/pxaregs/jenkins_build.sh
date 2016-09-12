@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -xe
 
 if [ $# -lt 2 ]; then
     echo "$0 repository arch"
