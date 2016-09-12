@@ -88,8 +88,10 @@ fi
 release=${gitdesc%-*}
 release=${release#*-}
 
-user=$(git log --max-count=1 --format="%an" .) || user="Unknown"
-email=$(git log --max-count=1 --format="%ae" .) || email="unknown@ucar.edu"
+user=$(git log --max-count=1 --format="%an" .) || user=""
+[ -z "$user" ] && user="Unknown"
+email=$(git log --max-count=1 --format="%ae" .) || email=""
+[ -z "$email" ] && email="unknown@ucar.edu"
 
 rm -f debian/changelog
 cat > debian/changelog << EOD
@@ -127,9 +129,17 @@ if [ -n "$repo" ]; then
     cat $changes
     echo ""
         
-    flock $repo sh -e -c "
-        reprepro -V -b $repo -C main include jessie $changes;
-        reprepro -b $repo deleteunreferenced"
+    if [ $arch = armel ]; then
+        flock $repo sh -e -c "
+            reprepro -V -b $repo -C main include jessie $changes;
+            reprepro -b $repo deleteunreferenced"
+    else
+        # If arch is not armel, just install .debs
+        debs=$(awk '/Files:/,/*/{print $5}' $changes | grep '.*\.deb$')
+        flock $repo sh -e -c "
+            reprepro -V -b $repo -C main -A $arch includedeb jessie $debs;
+            reprepro -b $repo deleteunreferenced"
+    fi
     rm -f ${pkg}_*_$arch.build ${pkg}_*.dsc ${pkg}*_$arch.deb $changes
 else
     echo "Results in $sdir"
