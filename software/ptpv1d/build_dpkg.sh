@@ -120,7 +120,7 @@ if [ -n "$repo" ]; then
         reprepro -V -b $repo -C main include jessie $changes;
         reprepro -b $repo deleteunreferenced"
 
-    rm -f ${pkg}_*_$arch.build ${pkg}_*.dsc ${pkg}_*.tar.xz ${pkg}*_$arch.deb $changes
+    rm -f ${pkg}_*_$arch.build ${pkg}_*.dsc ${pkg}*_$arch.deb $changes
 
 else
     echo "Results in $sdir"
