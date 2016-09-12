@@ -64,7 +64,7 @@ sdir=$(dirname $0)
 cd $sdir
 sdir=$PWD
 
-args="-a$arch"
+args="-a$arch -sa"
 
 karg=
 if $sign; then
