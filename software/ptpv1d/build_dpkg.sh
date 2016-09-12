@@ -31,6 +31,10 @@ while [ $# -gt 0 ]; do
         export CC=arm-linux-gnueabi-gcc
         arch=$1
         ;;
+    armhf)
+        export CC=arm-linux-gnueabihf-gcc
+        arch=$1
+        ;;
     *)
         usage $0
         ;;
