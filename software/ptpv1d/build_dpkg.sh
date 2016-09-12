@@ -116,7 +116,7 @@ if [ -n "$repo" ]; then
     cat $changes
     echo ""
 
-    flock $repo sh -c "
+    flock $repo sh -e -c "
         reprepro -V -b $repo -C main include jessie $changes;
         reprepro -b $repo deleteunreferenced"
 

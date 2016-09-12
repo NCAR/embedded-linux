@@ -11,7 +11,7 @@ arch=$2
 
 # directory containing script
 srcdir=$(readlink -f ${0%/*})
-hashfile=$srcdir/.last_hash
+hashfile=$srcdir/.last_hash_$arch
 cd $srcdir
 
 [ -f $hashfile ] && last_hash=$(cat $hashfile)
@@ -24,6 +24,10 @@ fi
 export GPG_AGENT_INFO
 [ -e $HOME/.gpg-agent-info ] && . $HOME/.gpg-agent-info
 
-./build_dpkg.sh -s -i $repo $arch || exit 1
+./build_dpkg.sh -s -i $repo $arch
+
+status=$?
+[ $status -eq 0 ] && echo $this_hash > $hashfile
+exit $status
 
 
