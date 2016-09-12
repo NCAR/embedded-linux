@@ -80,6 +80,11 @@ tar xzf ${pkg}_1.14.orig.tar.gz
 
 cd ${pkg}-1.14
 
+if ! gitdesc=$(git describe --match "v1.0"); then
+    echo "git describe failed, looking for a tag of the form v1.0"
+    exit 1
+fi  
+
 release=${gitdesc%-*}
 release=${release#*-}
 
@@ -88,7 +93,7 @@ email=$(git config --get user.email)
 
 rm -f debian/changelog
 cat > debian/changelog << EOD
-ptpv1d (1.0-$release) stable; urgency=low
+pxaregs (1.14-$release) stable; urgency=low
 
   * Update
 
