@@ -80,6 +80,22 @@ tar xzf ${pkg}_1.14.orig.tar.gz
 
 cd ${pkg}-1.14
 
+release=${gitdesc%-*}
+release=${release#*-}
+
+user=$(git config --get user.name)
+email=$(git config --get user.email)
+
+rm -f debian/changelog
+cat > debian/changelog << EOD
+ptpv1d (1.0-$release) stable; urgency=low
+
+  * Update
+
+ -- $user <$email>  $(date -R)
+EOD
+cat debian/initial_changelog >> debian/changelog
+
 if $use_chroot; then
     echo "Starting schroot, which takes some time ..."
     schroot -c $chr_name --directory=$PWD << EOD
