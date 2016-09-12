@@ -50,7 +50,7 @@ export GPG_AGENT_INFO
 [ -e $HOME/.gpg-agent-info ] && . $HOME/.gpg-agent-info
 
 dirs="ptpv1d-1.0"
-files="build_dpkg.sh jenkins_build.sh ptpv1d_1.0.orig.tar.gz"
+files="build_dpkg.sh jenkins_build.sh ptpv1d_1.0.orig.tar.xz"
 
 changed=false
 for dir in $dirs; do
