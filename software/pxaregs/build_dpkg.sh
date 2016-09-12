@@ -88,8 +88,8 @@ fi
 release=${gitdesc%-*}
 release=${release#*-}
 
-user=$(git config --get user.name)
-email=$(git config --get user.email)
+user=$(git log --max-count=1 --format="%an" .) || user="Unknown"
+email=$(git log --max-count=1 --format="%ae" .) || email="unknown@ucar.edu"
 
 rm -f debian/changelog
 cat > debian/changelog << EOD

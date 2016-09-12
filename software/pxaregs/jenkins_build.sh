@@ -24,7 +24,7 @@ fi
 export GPG_AGENT_INFO
 [ -e $HOME/.gpg-agent-info ] && . $HOME/.gpg-agent-info
 
-./build_dpkg.sh -s -i $repo $arch
+./build_dpkg.sh -c -s -i $repo $arch
 
 status=$?
 [ $status -eq 0 ] && echo $this_hash > $hashfile
