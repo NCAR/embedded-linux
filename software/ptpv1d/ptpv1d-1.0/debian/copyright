@@ -5,7 +5,7 @@ Source: <https://github.com/ptpd/ptpd>
 Files: *
 Copyright: 2009-2011 George V. Neville-Neil, Steven Kreuzer, Martin Burnicki
      2005-2008 Kendall Correll, Aidan Williams
-License: BSD
+License: BSD-2-clause
  Copyright (c) 2009-2011 George V. Neville-Neil, Steven Kreuzer, 
  .                       Martin Burnicki
  Copyright (c) 2005-2008 Kendall Correll, Aidan Williams

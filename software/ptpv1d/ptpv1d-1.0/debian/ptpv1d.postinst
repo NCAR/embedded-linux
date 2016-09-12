@@ -36,8 +36,4 @@ esac
 
 #DEBHELPER#
 
-if [ "$1" = "configure" ]; then
-    update-rc.d ptpdv1 defaults
-fi
-
 exit 0
