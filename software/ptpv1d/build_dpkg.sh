@@ -81,12 +81,30 @@ fi
 
 rm -f ${pkg}_*_$arch.changes
 
-# rm -rf ${pkg}-1.0
-
 tar xJf ${pkg}_1.0.orig.tar.xz
-# cp -r debian ${pkg}-1.0
 
 cd ${pkg}-1.0
+
+if ! gitdesc=$(git describe --match "v1.0"); then
+    echo "git describe failed, looking for a tag of the form v1.0"
+    exit 1
+fi  
+
+release=${gitdesc%-*}
+release=${release#*-}
+
+user=$(git config --get user.name)
+email=$(git config --get user.email)
+
+rm -f debian/changelog
+cat > debian/changelog << EOD
+ptpv1d (1.0-$release) stable; urgency=low
+
+  * Update
+
+ -- $user <$email>  $(date -R)
+EOD
+cat debian/initial_changelog >> debian/changelog
 
 if $use_chroot; then
     echo "Starting schroot, which takes some time ..."
