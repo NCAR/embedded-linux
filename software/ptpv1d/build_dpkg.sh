@@ -102,9 +102,9 @@ rm -f debian/changelog
 cat > debian/changelog << EOD
 ptpv1d (1.0-$release) stable; urgency=low
 
-  * Update
+  * $(git log --max-count=1 --format="%s" .)
 
- -- $user <$email>  $(date -R)
+ -- $user <$email>  $(git log --max-count=1 --format="%aD" .)
 EOD
 cat debian/initial_changelog >> debian/changelog
 
