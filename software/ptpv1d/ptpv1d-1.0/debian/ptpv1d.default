@@ -1,0 +1,10 @@
+# Defaults for ptpv1d initscript
+# sourced by /etc/init.d/ptpv1d
+# installed at /etc/default/ptpv1d by the maintainer scripts
+
+#
+# This is a POSIX shell fragment
+#
+
+# Additional options that are passed to the Daemon.
+DAEMON_OPTS="-t -s 1 -i NTP -b eth0 -p -n _DFLT -S -f /var/log/isfs/ptpd_stats -R /var/log/isfs/ptpd_record"
