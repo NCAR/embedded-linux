@@ -5,7 +5,7 @@ pkg=pxaregs
 key="<eol-prog@eol.ucar.edu>"
 
 usage() {
-    echo "Usage: ${1##*/} [-s] [-i repository ] arch"
+    echo "Usage: ${1##*/} [-c] [-s] [-i repository ] arch"
     echo "-c: build in a chroot"
     echo "-s: sign the package files with key=$key"
     echo "-i: install them with reprepro to the repository"
@@ -140,7 +140,7 @@ if [ -n "$repo" ]; then
             reprepro -V -b $repo -C main -A $arch includedeb jessie $debs;
             reprepro -b $repo deleteunreferenced"
     fi
-    rm -f ${pkg}_*_$arch.build ${pkg}_*.dsc ${pkg}*_$arch.deb $changes
+    rm -f ${pkg}_*.build ${pkg}_*.dsc ${pkg}_*.debian.tar.xz ${pkg}_*.deb ${pkg}_*.changes
 else
     echo "Results in $sdir"
 fi
