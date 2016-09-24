@@ -7,4 +7,4 @@
 #
 
 # Additional options that are passed to the Daemon.
-DAEMON_OPTS="-t -s 1 -i NTP -b eth0 -p -n _DFLT -S -f /var/log/isfs/ptpd_stats -R /var/log/isfs/ptpd_record"
+DAEMON_ARGS="-t -s 1 -i NTP -b eth0 -p -n _DFLT -S -f /var/log/isfs/ptpd_stats -R /var/log/isfs/ptpd_record"
