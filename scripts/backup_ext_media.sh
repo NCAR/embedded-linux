@@ -5,7 +5,7 @@
 if [ $# -lt 2 ]; then
     echo "Usage: $0 mountpoint tarfile"
     echo "mountpoint: where SD/CF media is mounted"
-    echo "A tar backup called  <tarfile>.xz will be created"
+    echo "A bzip2 compressed tar backup called  <tarfile> will be created"
     exit 1
 fi
 
@@ -46,11 +46,6 @@ var/lib/ntp
 var/lib/urandom 
 var/spool/cron
 var/tmp
-var/log/*.gz
-var/log/*.[0-9]
-var/log/*.[0-9][0-9]
-var/log/chrony
-.bash_history
 EOD
 
 # Since we want to fiddle with files, rsync to a tmpdir
@@ -75,7 +70,7 @@ popd > /dev/null
 # $tmptar is owned and rw only by root
 sudo chmod ugo+r $tmptar
 
-cp $tmptar $tarfile.xz
+cp $tmptar $tarfile
 
 sudo rm $tmptar
 
