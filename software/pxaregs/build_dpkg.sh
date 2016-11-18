@@ -131,14 +131,12 @@ if [ -n "$repo" ]; then
         
     if [ $arch = armel ]; then
         flock $repo sh -e -c "
-            reprepro -V -b $repo -C main include jessie $changes;
-            reprepro -b $repo deleteunreferenced"
+            reprepro -V -b $repo -C main --keepunreferencedfiles include jessie $changes"
     else
         # If arch is not armel, just install .debs
         debs=$(awk '/Files:/,/*/{print $5}' $changes | grep '.*\.deb$')
         flock $repo sh -e -c "
-            reprepro -V -b $repo -C main -A $arch includedeb jessie $debs;
-            reprepro -b $repo deleteunreferenced"
+            reprepro -V -b $repo -C main -A $arch --keepunreferencedfiles includedeb jessie $debs"
     fi
     rm -f ${pkg}_*.build ${pkg}_*.dsc ${pkg}_*.debian.tar.xz ${pkg}_*.deb ${pkg}_*.changes
 else

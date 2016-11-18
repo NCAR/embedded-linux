@@ -124,7 +124,7 @@ if [ -n "$repo" ]; then
     pkgs=$(grep "^Binary:" $chngs | sed 's/Binary: //')
 
     flock $repo sh -c "
-        reprepro -V -b $repo include jessie $chngs"
+        reprepro -V -b $repo --keepunreferencedfiles include jessie $chngs"
 
     rm -f chrony_*_$arch.build chrony_*.dsc chrony_*.tar.?z chrony*_all.deb chrony*_$arch.deb $chngs
 
