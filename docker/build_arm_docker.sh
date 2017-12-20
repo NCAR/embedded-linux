@@ -4,20 +4,12 @@
 # various targets, such as armel and armhf (RPi).
 # The image is built from the Dockerfile.cross_arm in this directory.
 
-# debian-armel-cross:jessie image will have a "builder" user.
-# If the eol group exists, the builder user will have that
-# numeric group id, otherwise the same group and gid as the user
-# that runs this script.
+set -e
 
-# look for gid of group "eol"
+# images will have a "builder" user, and a group eol:1342
+
 group=eol
-gid=$(getent group $group | cut -d: -f3)
-
-# if not found, use user'd gid
-if ! [ $eolgid ]; then
-    gid=$(id -g)
-    group=$(id -g -n)
-fi
+gid=1342
 
 image=debian-armel-cross:jessie 
 arch=armel
