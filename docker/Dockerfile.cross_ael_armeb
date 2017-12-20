@@ -1,0 +1,45 @@
+FROM library/fedora:25
+LABEL organization="NCAR EOL"
+
+ARG user=builder
+ARG uid=1000
+ARG group=eol
+ARG gid=1000
+ARG hostarch=armeb
+
+RUN dnf install -y sudo
+
+RUN groupadd --gid $gid $group
+RUN useradd --gid $group --uid $uid --groups wheel $user
+
+RUN echo "%wheel   ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/wheel_group
+
+RUN rpm -ihv http://www.eol.ucar.edu/software/rpms/eol-repo-fedora-1-3.noarch.rpm
+
+# The eol_scons qt4 tool does a Stop if moc-qt4 is not found.
+# xmlrpc++ contains /usr/lib64/pkgconfig/xmlrpcpp.pc, which the
+# scons tool wants to find. Would be nice to fix these issues in eol_scons.
+
+# ael-base creates symbolic links with the i686 version of /lib/ld-linux
+# so that the old arcom binaries work, so install glibc.i686 before nidas-ael
+
+RUN dnf install -y scons eol_scons git flex qt4-devel glibc.i686 nidas-ael xmlrpc++
+
+# install some i686 stuff needed by old /opt/arcom/bin binaries
+# RUN rpm -ihv --nodeps /tmp/docker-files/fakeroot-libs-1.20.2-4.fc24.i686.rpm
+# Installing  : fakeroot-1.20.2-4.fc24.x86_64                            45/551
+# failed to link /usr/lib64/libfakeroot/libfakeroot-0.so -> /etc/alternatives/libfakeroot.so: No such file or directory
+# failed to link /usr/lib64/libfakeroot/libfakeroot-0.so -> /etc/alternatives/libfakeroot.so: No such file or directory
+# warning: %post(fakeroot-1.20.2-4.fc24.x86_64) scriptlet failed, exit status 2
+
+# install some i686 stuff needed by old /opt/arcom/bin binaries.
+# The intent is to make this command run without failing due to
+# missing library dependencies:
+# PATH=$PATH:/opt/arcom/bin; LD_LIBRARY_PATH=/usr/lib fakeroot /opt/arcom/bin/dpkg
+RUN dnf install -y fakeroot-libs.i686 zlib.i686
+# For some reason dnf/yum can't find fakeroot.i686, so install by hand
+# RUN rpm -ihv --nodeps --force /tmp/docker-files/fakeroot-1.20.2-4.fc24.i686.rpm
+
+USER $user
+WORKDIR /home/$user
+
